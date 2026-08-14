@@ -18,6 +18,18 @@ importers:
         specifier: ^4.1.8
         version: 4.1.10(@types/node@22.20.1)(vite@8.2.1(@types/node@22.20.1)(yaml@2.9.0))
 
+  packages/dsh-auto-fold:
+    devDependencies:
+      '@deepseek-ai/cordis':
+        specifier: ^4.0.1
+        version: 4.0.1(@deepseek-ai/cordis-plugin-include@1.0.6)(@deepseek-ai/cordis-plugin-loader@1.0.2)
+      '@deepseek-ai/dsh-client-runtime':
+        specifier: ^0.1.0-rc.5
+        version: 0.1.0-rc.6(5ee287bd07c00b3171c7ee342e9431a4)
+      tsdown:
+        specifier: ^0.22.2
+        version: 0.22.14(typescript@6.0.3)
+
   packages/dsh-config-instructions:
     dependencies:
       '@deepseek-ai/schemastery':

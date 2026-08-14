@@ -1,0 +1,4 @@
+# The dsh-auto-fold bundle patch: one row inserted into the profile.
+- insert:
+    - id: auto-fold
+      name: '@neplich/dsh-auto-fold'

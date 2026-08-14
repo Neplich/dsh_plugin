@@ -2,6 +2,9 @@
   "files": [],
   "references": [
     {
+      "path": "packages/dsh-auto-fold"
+    },
+    {
       "path": "packages/dsh-file-mention"
     },
     {
