@@ -23,6 +23,7 @@ A package becomes an installable **bundle** by declaring `"dsh": { "bundle": { "
 | [`@neplich/dsh-config-skills`](packages/config-skills/README.md) | Web GUI plugin: a 技能 settings section — read-only browser of personal (`~/.dsh`/`~/.agents`) and project (`<root>/.dsh`/`<root>/.agents`) skills with source badges and shadowing |
 | [`@neplich/dsh-config-instructions`](packages/config-instructions/README.md) | Web GUI plugin: an 指令文档 settings section — view and edit personal and project-root AGENTS.md / AGENTS.local.md files (atomic writes, live effect) |
 | [`@neplich/dsh-config-mcp`](packages/config-mcp/README.md) | Web GUI plugin: an MCP 服务 settings section — live server status, add/edit/toggle/delete written to the user-level cordis.patch.yml with automatic HMR reload |
+| [`@neplich/dsh-preset-dev`](packages/dsh-preset-dev/README.md) | Agent preset installer: installs the 开发模式 (dev) preset — standard coding agent plus the cordis toolset — into the user preset root |
 
 The three config plugins share code through `packages/config-shared` (`@neplich/dsh-config-shared`), an internal library inlined at build time — not itself a plugin.
 
@@ -44,6 +45,8 @@ pnpm run clean   # remove build outputs
 3. Add `{ "path": "packages/<name>" }` to the root `tsconfig.json` references.
 4. Write `packages/<name>/README.md` describing the plugin's function, config, and install, and link it from the [Plugins](#plugins) table above.
 5. `pnpm install && pnpm run build && pnpm run test`.
+
+> **Installability**: plugin source must install and build in any environment after cloning. Depend on harness packages with npm-registry semver ranges in `devDependencies` (matching `peerDependencies`), never `link:../../../deepseek-harness/...` sibling-checkout paths; use the pnpm `workspace:` protocol for in-repo dependencies. Re-run a full `pnpm install` (not just the existing `node_modules`) after any dependency change.
 
 Choose the extension point before writing code — tool, hook, LLM adapter, command, capability seam — with the `dsh-plugin-development` agent skill and the upstream [extension cookbook](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/cookbook/extension-cookbook.md).
 
