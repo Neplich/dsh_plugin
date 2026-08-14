@@ -10,6 +10,10 @@ dsh Web GUI 插件：在设置面板中新增「MCP 服务」分区，完整管�
 - 保存后由 dsh 的 patch watch + HMR 自动热重载（断连重连），无需重启
 - 支持字段：serverName、transport、command/args/env/cwd（stdio）、url/headers（http）、toolCallTimeoutMs、failOnStartupError
 
+## 国际化
+
+全部界面文案（分区标题、导航项、状态标签、表单、按钮、提示）通过 `config-mcp` locale namespace 提供中英双语，随 dsh 设置中的语言切换即时自适应。服务端返回的错误消息保持英文（协议层中立文案）。
+
 ## 安装
 
 ```sh

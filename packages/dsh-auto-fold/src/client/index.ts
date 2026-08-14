@@ -15,6 +15,9 @@
  * @module @neplich/dsh-auto-fold/client
  */
 import type { ClientContext } from '@deepseek-ai/dsh-client-runtime/client'
+// Type-only: the ctx.locale service declaration.
+import type {} from '@deepseek-ai/dsh-client-locale/client'
+import { en, NS, zh } from './locales.ts'
 
 /** Expand-bar class name; also the CSS injection key. */
 export const BAR_CLASS = 'dsh-collapse-bar'
@@ -105,11 +108,17 @@ interface BarRecord {
   folded: boolean
 }
 
+/** Required services (cordis fiber inject). */
+export const inject = ['locale']
+
 /**
  * Client plugin body: observe every chat flow and execute fold plans.
  * @param ctx - client root context.
  */
 export function apply(ctx: ClientContext): void {
+  ctx.effect(() => ctx.locale.register(NS, { zh, en }), 'auto-fold: dictionaries')
+  const t = ctx.locale.bind(NS)
+
   const style = document.createElement('style')
   style.dataset.plugin = 'auto-fold'
   style.textContent = STYLE_TEXT
@@ -166,14 +175,14 @@ export function apply(ctx: ClientContext): void {
       if (record.bodyRow.querySelector('[data-variant="think"]') !== null) {
         record.bodyRow.dataset.dshHideThink = '1'
       }
-      record.bar.textContent = `已折叠 ${record.count} 条思考与工具调用记录 · 点击展开`
+      record.bar.textContent = t('bar.folded', { count: record.count })
     } else {
       for (const row of record.targets) {
         row.style.display = ''
         foldedRows.delete(row)
       }
       delete record.bodyRow.dataset.dshHideThink
-      record.bar.textContent = `已展开 ${record.count} 条思考与工具调用记录 · 点击收起`
+      record.bar.textContent = t('bar.expanded', { count: record.count })
     }
   }
 
@@ -256,6 +265,12 @@ export function apply(ctx: ClientContext): void {
   })
   // Catch content already on screen at load (reopened sessions, history).
   scanAll()
+
+  // Language switch: re-render every live bar in the new language (the
+  // bound translate reads the active locale at call time).
+  ctx.effect(() => ctx.locale.subscribe(() => {
+    for (const record of bars) applyBar(record)
+  }), 'auto-fold: locale refresh')
 
   ctx.effect(() => () => {
     if (observer !== null) observer.disconnect()

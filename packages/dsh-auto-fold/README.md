@@ -16,6 +16,10 @@ The strategy is pure DOM over the shipped chat flow: no harness change, no slot 
 
 Requires a `dsh web` profile (it is a browser-only surface plugin; the host half is an empty apply so the row mounts in the Loader).
 
+## Internationalization
+
+The expand bar copy (collapsed/expanded counts) ships in zh and en through the `auto-fold` locale namespace and re-renders live when dsh's UI language switches (a `ctx.locale` revision subscription re-paints every mounted bar).
+
 ## Config
 
 None — no tunables; the plugin always collapses thinking + tool-call records above the body of each turn.

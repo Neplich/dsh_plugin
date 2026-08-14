@@ -3,14 +3,19 @@
  * AGENTS.local.md (local overlay) editable in place, CLAUDE.md companions
  * read-only when present. Saving writes atomically through the host route;
  * the harness's own watcher injects "Updated instructions from:" into live
- * sessions, and new sessions pick the file up at birth.
+ * sessions, and new sessions pick the file up at birth. All copy goes
+ * through the plugin's 'config-instructions' translate seat.
  */
 import { useEffect, useState } from 'react'
 import { Button, Toast } from '@deepseek-ai/dsh-client-ui-primitives'
+import type { TranslateNS } from '@deepseek-ai/dsh-client-ui-slots'
 import { ScopeBar, styles, useRoots } from '@neplich/dsh-config-shared/client'
 import { api } from './api.ts'
 import type { InstructionFile, InstructionsResponse, Scope } from '../shared.ts'
 import css from './InstructionsPage.module.css'
+
+/** Translate seat of the 'config-instructions' namespace (own keys + shared scope keys). */
+type InstructionsTranslate = TranslateNS<'config-instructions'>
 
 /** One writable instruction file (base / local only). */
 type EditableInstructionFile = InstructionFile & { readonly kind: 'base' | 'local' }
@@ -22,12 +27,13 @@ function isEditable(file: InstructionFile): file is EditableInstructionFile {
 
 /** Editable card for one writable instruction file (base / local). */
 function InstructionEditor({
-  file, scope, root, onSaved,
+  file, scope, root, onSaved, t,
 }: {
   file: EditableInstructionFile
   scope: Scope
   root: string | undefined
   onSaved: (files: InstructionsResponse, message: string) => void
+  t: InstructionsTranslate
 }) {
   const [draft, setDraft] = useState(file.content)
   const [saving, setSaving] = useState(false)
@@ -35,14 +41,16 @@ function InstructionEditor({
   // Re-sync the draft when the file identity or its on-disk content changes.
   useEffect(() => { setDraft(file.content) }, [file.path, file.content])
   const dirty = draft !== file.content
-  const title = file.kind === 'base' ? 'AGENTS.md' : 'AGENTS.local.md（本地覆盖）'
+  const title = file.kind === 'base'
+    ? 'AGENTS.md'
+    : t('file.localTitle', { name: 'AGENTS.local.md' })
   return (
     <div className={css.card}>
       <div className={css.cardHeader}>
         <h3 className={css.cardTitle}>{title}</h3>
         <span className={styles.pathNote}>{file.path}</span>
-        {!file.exists && <span className={styles.hint}>尚未创建</span>}
-        {file.truncated && <span className={styles.error}>文件过大，仅显示部分内容，保存将覆盖为当前内容</span>}
+        {!file.exists && <span className={styles.hint}>{t('file.notCreated')}</span>}
+        {file.truncated && <span className={styles.error}>{t('file.tooLarge')}</span>}
       </div>
       <div className={css.cardBody}>
         <textarea
@@ -50,7 +58,7 @@ function InstructionEditor({
           aria-label={title}
           value={draft}
           spellCheck={false}
-          placeholder={file.kind === 'base' ? '编写该级别对所有会话生效的指令…' : '编写仅本机生效、不入库的覆盖指令…'}
+          placeholder={file.kind === 'base' ? t('editor.placeholder.base') : t('editor.placeholder.local')}
           onChange={(event) => { setDraft(event.target.value) }}
         />
         <div className={css.actions}>
@@ -64,7 +72,7 @@ function InstructionEditor({
               api.writeInstruction({ scope, ...(root !== undefined ? { root } : {}), kind: file.kind, content: draft }).then(
                 (files) => {
                   setSaving(false)
-                  onSaved(files, file.exists ? '已保存' : '已创建 ' + title)
+                  onSaved(files, file.exists ? t('toast.saved') : t('toast.created', { title }))
                 },
                 (err: unknown) => {
                   setSaving(false)
@@ -73,11 +81,11 @@ function InstructionEditor({
               )
             }}
           >
-            {saving ? '保存中…' : file.exists ? '保存' : '创建文件'}
+            {saving ? t('action.saving') : file.exists ? t('action.save') : t('action.create')}
           </Button>
           {dirty && (
             <Button variant="ghost" size="sm" onClick={() => { setDraft(file.content) }}>
-              还原
+              {t('action.revert')}
             </Button>
           )}
           {error !== undefined && <span className={styles.error}>{error}</span>}
@@ -88,12 +96,12 @@ function InstructionEditor({
 }
 
 /** Read-only disclosure for a CLAUDE.md companion. */
-function ClaudeCard({ file }: { file: InstructionFile }) {
+function ClaudeCard({ file, t }: { file: InstructionFile, t: InstructionsTranslate }) {
   const title = file.kind === 'claude' ? 'CLAUDE.md' : 'CLAUDE.local.md'
   return (
     <details className={css.card}>
       <summary className={css.summary}>
-        {title}（只读，与 AGENTS.md 同链加载） · <span className={styles.pathNote}>{file.path}</span>
+        {t('claude.readonly', { title })} · <span className={styles.pathNote}>{file.path}</span>
       </summary>
       <div className={css.cardBody}>
         <pre className={css.readonly}>{file.content}</pre>
@@ -103,7 +111,7 @@ function ClaudeCard({ file }: { file: InstructionFile }) {
 }
 
 /** Render the instructions page. */
-export function InstructionsPage() {
+export function InstructionsPage({ t }: { t: InstructionsTranslate }) {
   const rootsState = useRoots(api.roots)
   const [scope, setScope] = useState<Scope>('personal')
   const [root, setRoot] = useState<string>()
@@ -135,15 +143,13 @@ export function InstructionsPage() {
 
   return (
     <div>
-      <ScopeBar scope={scope} onScope={setScope} rootsState={rootsState} root={root} onRoot={setRoot} />
+      <ScopeBar scope={scope} onScope={setScope} rootsState={rootsState} root={root} onRoot={setRoot} t={t} />
       <p className={styles.hint}>
-        {scope === 'personal'
-          ? '个人级指令对所有项目的所有会话生效。'
-          : '项目根级指令对该仓库下的所有会话生效；子目录中的 AGENTS.md 由 Agent 在探索目录时按需加载，不在此管理。'}
-        保存后即时生效：进行中的会话会收到更新提示，新会话直接加载最新内容。
+        {scope === 'personal' ? t('hint.personal') : t('hint.project')}
+        {' '}{t('hint.liveEffect')}
       </p>
       {error !== undefined && <p className={styles.error}>{error}</p>}
-      {data === undefined && error === undefined && <p className={css.loading}>加载中…</p>}
+      {data === undefined && error === undefined && <p className={css.loading}>{t('loading')}</p>}
       <div className={css.cards}>
         {writable.map((file) => (
           <InstructionEditor
@@ -151,13 +157,14 @@ export function InstructionsPage() {
             file={file}
             scope={scope}
             root={effectiveRoot}
+            t={t}
             onSaved={(files, message) => {
               setData(files)
               setToast((previous) => ({ seq: (previous?.seq ?? 0) + 1, text: message }))
             }}
           />
         ))}
-        {readonly.map((file) => <ClaudeCard key={file.kind} file={file} />)}
+        {readonly.map((file) => <ClaudeCard key={file.kind} file={file} t={t} />)}
       </div>
       {toast !== undefined && (
         <Toast key={toast.seq} text={toast.text} onDone={() => { setToast(undefined) }} />

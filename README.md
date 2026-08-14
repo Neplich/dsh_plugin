@@ -18,14 +18,14 @@ A package becomes an installable **bundle** by declaring `"dsh": { "bundle": { "
 
 | Package | Description | README |
 |---|---|---|
-| `@neplich/dsh-auto-fold` | Web GUI plugin: when the assistant starts outputting body text, auto-collapse the thinking and tool-call records above it behind one persistent expand/collapse bar | [README](packages/dsh-auto-fold/README.md) |
+| `@neplich/dsh-auto-fold` | Web GUI plugin: when the assistant starts outputting body text, auto-collapse the thinking and tool-call records above it behind one persistent expand/collapse bar (bilingual zh/en bar copy following dsh's UI language) | [README](packages/dsh-auto-fold/README.md) |
 | `@neplich/dsh-file-mention` | Web GUI plugin: `@` file mentions in the composer (cached local substring filter, icon-marked chips, multi-file references); mentioned files are inlined into the prompt as `<file path="...">...</file>` | [README](packages/dsh-file-mention/README.md) |
-| `@neplich/dsh-config-skills` | Web GUI plugin: a 技能 settings section — read-only browser of personal (`~/.dsh`/`~/.agents`) and project (`<root>/.dsh`/`<root>/.agents`) skills with source badges and shadowing | [README](packages/dsh-config-skills/README.md) |
-| `@neplich/dsh-config-instructions` | Web GUI plugin: an 指令文档 settings section — view and edit personal and project-root AGENTS.md / AGENTS.local.md files (atomic writes, live effect) | [README](packages/dsh-config-instructions/README.md) |
-| `@neplich/dsh-config-mcp` | Web GUI plugin: an MCP 服务 settings section — live server status, add/edit/toggle/delete written to the user-level cordis.patch.yml with automatic HMR reload | [README](packages/dsh-config-mcp/README.md) |
+| `@neplich/dsh-config-skills` | Web GUI plugin: a 技能 settings section — read-only browser of personal (`~/.dsh`/`~/.agents`) and project (`<root>/.dsh`/`<root>/.agents`) skills with source badges and shadowing (bilingual zh/en UI following dsh's language) | [README](packages/dsh-config-skills/README.md) |
+| `@neplich/dsh-config-instructions` | Web GUI plugin: an 指令文档 settings section — view and edit personal and project-root AGENTS.md / AGENTS.local.md files (atomic writes, live effect; bilingual zh/en UI following dsh's language) | [README](packages/dsh-config-instructions/README.md) |
+| `@neplich/dsh-config-mcp` | Web GUI plugin: an MCP 服务 settings section — live server status, add/edit/toggle/delete written to the user-level cordis.patch.yml with automatic HMR reload (bilingual zh/en UI following dsh's language) | [README](packages/dsh-config-mcp/README.md) |
 | `@neplich/dsh-preset-dev` | Agent preset installer: installs the 开发模式 (dev) preset — standard coding agent plus the cordis toolset — into the user preset root | [README](packages/dsh-preset-dev/README.md) |
 
-The three config plugins share code through `packages/dsh-config-shared` (`@neplich/dsh-config-shared`), an internal library inlined at build time — not itself a plugin.
+The three config plugins share code through `packages/dsh-config-shared` (`@neplich/dsh-config-shared`), an internal library inlined at build time — not itself a plugin. Its shared scope-widget copy ships as dictionaries (`sharedScopeZh`/`sharedScopeEn`) that each consumer spreads into its own locale namespace.
 
 Every finished plugin ships a `README.md` in its package directory describing its function (features, config, install); the table above links to it. Keep the table in sync with `packages/`: any plugin addition, removal, or major update must update the plugin README and this table in the same change.
 

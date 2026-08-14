@@ -3,27 +3,32 @@
  * management — create/edit/delete for managed servers, enable/disable for
  * all. Mutations write $DSH_HOME/cordis.patch.yml; the harness watches that
  * file and HMR-reloads the composition, so every mutation schedules a
- * delayed refetch to show the post-reload state.
+ * delayed refetch to show the post-reload state. All copy goes through the
+ * plugin's 'config-mcp' translate seat.
  */
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   Button, IconEditOutline16, IconPlusOutline16, IconTrashOutline16, Modal, StateDot, Toast, Tooltip,
 } from '@deepseek-ai/dsh-client-ui-primitives'
 import type { StateDotState } from '@deepseek-ai/dsh-client-ui-primitives'
+import type { TranslateNS } from '@deepseek-ai/dsh-client-ui-slots'
 import { styles } from '@neplich/dsh-config-shared/client'
 import { api } from './api.ts'
 import type { McpListResponse, McpServerInput, McpServerView } from '../shared.ts'
 import css from './McpPage.module.css'
 
+/** Translate seat of the 'config-mcp' namespace (own keys + shared scope keys). */
+type McpTranslate = TranslateNS<'config-mcp'>
+
 /** Map a fiber phase onto the StateDot semantic. */
-function statusOf(server: McpServerView): { state: StateDotState, label: string } {
-  if (!server.enabled) return { state: 'warning', label: '已禁用' }
+function statusOf(server: McpServerView, t: McpTranslate): { state: StateDotState, label: string } {
+  if (!server.enabled) return { state: 'warning', label: t('status.disabled') }
   switch (server.fiberPhase) {
-    case 'active': return { state: 'done', label: '运行中' }
-    case 'failed': return { state: 'error', label: '失败' }
-    case 'loading': case 'pending': return { state: 'ongoing', label: '连接中' }
-    case 'unloading': return { state: 'ongoing', label: '重载中' }
-    default: return { state: 'warning', label: '未加载' }
+    case 'active': return { state: 'done', label: t('status.active') }
+    case 'failed': return { state: 'error', label: t('status.failed') }
+    case 'loading': case 'pending': return { state: 'ongoing', label: t('status.connecting') }
+    case 'unloading': return { state: 'ongoing', label: t('status.reloading') }
+    default: return { state: 'warning', label: t('status.notLoaded') }
   }
 }
 
@@ -48,23 +53,23 @@ const EMPTY_FORM: FormState = {
 }
 
 /** Parse KEY=VALUE lines into a record; malformed lines throw with their line number. */
-function parseKeyValues(text: string, label: string): Record<string, string> | undefined {
+function parseKeyValues(text: string, label: string, t: McpTranslate): Record<string, string> | undefined {
   const out: Record<string, string> = {}
   const lines = text.split('\n').map((line) => line.trim()).filter((line) => line !== '')
   for (const line of lines) {
     const cut = line.indexOf('=')
-    if (cut <= 0) throw new Error(label + ' 存在格式错误的行：' + line)
+    if (cut <= 0) throw new Error(t('form.malformedLine', { label, line }))
     out[line.slice(0, cut).trim()] = line.slice(cut + 1).trim()
   }
   return Object.keys(out).length > 0 ? out : undefined
 }
 
 /** Convert the form into a validated payload (throws on malformed fields). */
-function formToInput(form: FormState): McpServerInput {
+function formToInput(form: FormState, t: McpTranslate): McpServerInput {
   const args = form.args.split('\n').map((line) => line.trim()).filter((line) => line !== '')
   const timeout = form.toolCallTimeoutMs.trim()
-  const env = parseKeyValues(form.env, '环境变量')
-  const headers = parseKeyValues(form.headers, '请求头')
+  const env = parseKeyValues(form.env, t('field.env'), t)
+  const headers = parseKeyValues(form.headers, t('field.headers'), t)
   return {
     serverName: form.serverName.trim(),
     transport: form.transport,
@@ -104,12 +109,13 @@ function inputToForm(input: McpServerInput): FormState {
 
 /** Create/edit dialog. */
 function ServerDialog({
-  editing, onClose, onSaved,
+  editing, onClose, onSaved, t,
 }: {
   /** The managed entry id being edited; undefined for create. */
   editing: string | undefined
   onClose: () => void
   onSaved: (message: string) => void
+  t: McpTranslate
 }) {
   const [form, setForm] = useState<FormState>(EMPTY_FORM)
   const [loading, setLoading] = useState(editing !== undefined)
@@ -138,7 +144,7 @@ function ServerDialog({
   const submit = (): void => {
     let input: McpServerInput
     try {
-      input = formToInput(form)
+      input = formToInput(form, t)
     } catch (err) {
       setError(String(err instanceof Error ? err.message : err))
       return
@@ -149,7 +155,7 @@ function ServerDialog({
       ? api.mcpCreate({ server: input })
       : api.mcpUpdate({ id: editing, server: input })
     request.then(
-      () => { onSaved(editing === undefined ? '已添加，正在热重载…' : '已保存，正在热重载…') },
+      () => { onSaved(editing === undefined ? t('toast.added') : t('toast.saved')) },
       (err: unknown) => {
         setSaving(false)
         setError(String(err))
@@ -161,27 +167,25 @@ function ServerDialog({
     <Modal
       open
       onClose={onClose}
-      title={editing === undefined ? '添加 MCP 服务器' : '编辑 MCP 服务器'}
-      closeLabel="关闭"
-      description={editing === undefined
-        ? '服务器将作为插件条目写入用户级 cordis.patch.yml，保存后自动热重载生效。'
-        : '修改将整体替换该条目的配置，保存后自动热重载生效。'}
+      title={editing === undefined ? t('dialog.addTitle') : t('dialog.editTitle')}
+      closeLabel={t('action.close')}
+      description={editing === undefined ? t('dialog.addDescription') : t('dialog.editDescription')}
       footer={(
         <>
-          <Button variant="ghost" size="sm" onClick={onClose}>取消</Button>
+          <Button variant="ghost" size="sm" onClick={onClose}>{t('action.cancel')}</Button>
           <Button variant="primary" size="sm" disabled={saving || loading} onClick={submit}>
-            {saving ? '保存中…' : '保存'}
+            {saving ? t('action.saving') : t('action.save')}
           </Button>
         </>
       )}
     >
       {loading
-        ? <p className={css.loading}>加载中…</p>
+        ? <p className={css.loading}>{t('loading')}</p>
         : (
           <div className={css.form}>
             <div className={css.fieldRow}>
               <div className={css.field}>
-                <label className={css.fieldLabel} htmlFor="cc-mcp-name">名称（工具命名空间）</label>
+                <label className={css.fieldLabel} htmlFor="cc-mcp-name">{t('field.name')}</label>
                 <input
                   id="cc-mcp-name"
                   className={css.monoInput}
@@ -192,7 +196,7 @@ function ServerDialog({
                 />
               </div>
               <div className={css.field}>
-                <span className={css.fieldLabel}>传输方式</span>
+                <span className={css.fieldLabel}>{t('field.transport')}</span>
                 <div className={css.radioRow}>
                   <label>
                     <input
@@ -200,7 +204,7 @@ function ServerDialog({
                       checked={form.transport === 'stdio'}
                       onChange={() => { patch({ transport: 'stdio' }) }}
                     />
-                    stdio（本地命令）
+                    {t('field.transportStdio')}
                   </label>
                   <label>
                     <input
@@ -217,7 +221,7 @@ function ServerDialog({
               ? (
                 <>
                   <div className={css.field}>
-                    <label className={css.fieldLabel} htmlFor="cc-mcp-command">命令</label>
+                    <label className={css.fieldLabel} htmlFor="cc-mcp-command">{t('field.command')}</label>
                     <input
                       id="cc-mcp-command"
                       className={css.monoInput}
@@ -227,7 +231,7 @@ function ServerDialog({
                     />
                   </div>
                   <div className={css.field}>
-                    <label className={css.fieldLabel} htmlFor="cc-mcp-args">参数（每行一个）</label>
+                    <label className={css.fieldLabel} htmlFor="cc-mcp-args">{t('field.args')}</label>
                     <textarea
                       id="cc-mcp-args"
                       className={css.monoInput}
@@ -237,7 +241,7 @@ function ServerDialog({
                     />
                   </div>
                   <div className={css.field}>
-                    <label className={css.fieldLabel} htmlFor="cc-mcp-env">环境变量（每行 KEY=VALUE）</label>
+                    <label className={css.fieldLabel} htmlFor="cc-mcp-env">{t('field.envLines')}</label>
                     <textarea
                       id="cc-mcp-env"
                       className={css.monoInput}
@@ -247,7 +251,7 @@ function ServerDialog({
                     />
                   </div>
                   <div className={css.field}>
-                    <label className={css.fieldLabel} htmlFor="cc-mcp-cwd">工作目录（可选）</label>
+                    <label className={css.fieldLabel} htmlFor="cc-mcp-cwd">{t('field.cwd')}</label>
                     <input
                       id="cc-mcp-cwd"
                       className={css.monoInput}
@@ -260,7 +264,7 @@ function ServerDialog({
               : (
                 <>
                   <div className={css.field}>
-                    <label className={css.fieldLabel} htmlFor="cc-mcp-url">服务地址</label>
+                    <label className={css.fieldLabel} htmlFor="cc-mcp-url">{t('field.url')}</label>
                     <input
                       id="cc-mcp-url"
                       className={css.monoInput}
@@ -270,7 +274,7 @@ function ServerDialog({
                     />
                   </div>
                   <div className={css.field}>
-                    <label className={css.fieldLabel} htmlFor="cc-mcp-headers">请求头（每行 KEY=VALUE，可选）</label>
+                    <label className={css.fieldLabel} htmlFor="cc-mcp-headers">{t('field.headersLines')}</label>
                     <textarea
                       id="cc-mcp-headers"
                       className={css.monoInput}
@@ -283,7 +287,7 @@ function ServerDialog({
               )}
             <div className={css.fieldRow}>
               <div className={css.field}>
-                <label className={css.fieldLabel} htmlFor="cc-mcp-timeout">工具调用超时（毫秒，可选）</label>
+                <label className={css.fieldLabel} htmlFor="cc-mcp-timeout">{t('field.timeout')}</label>
                 <input
                   id="cc-mcp-timeout"
                   className={css.textInput}
@@ -294,14 +298,14 @@ function ServerDialog({
                 />
               </div>
               <div className={css.field}>
-                <span className={css.fieldLabel}>启动行为</span>
+                <span className={css.fieldLabel}>{t('field.startup')}</span>
                 <label className={css.checkRow}>
                   <input
                     type="checkbox"
                     checked={form.failOnStartupError}
                     onChange={(event) => { patch({ failOnStartupError: event.target.checked }) }}
                   />
-                  启动连接失败时加载失败（failOnStartupError）
+                  {t('field.failOnStartupError')}
                 </label>
               </div>
             </div>
@@ -313,7 +317,7 @@ function ServerDialog({
 }
 
 /** Render the MCP servers page. */
-export function McpPage() {
+export function McpPage({ t }: { t: McpTranslate }) {
   const [data, setData] = useState<McpListResponse>()
   const [error, setError] = useState<string>()
   const [toast, setToast] = useState<{ seq: number, text: string }>()
@@ -367,8 +371,8 @@ export function McpPage() {
     <div>
       <div className={styles.toolbar}>
         <span className={styles.hint}>
-          管理写入用户级补丁文件{data !== undefined && <>：<span className={styles.pathNote}>{data.patchPath}</span></>}
-          ，保存后由 dsh 自动热重载（断连重连）。
+          {t('toolbar.note')}{data !== undefined && <>：<span className={styles.pathNote}>{data.patchPath}</span></>}
+          {t('toolbar.noteSuffix')}
         </span>
         <span className={styles.toolbarSpacer} />
         <Button
@@ -377,18 +381,18 @@ export function McpPage() {
           icon={<IconPlusOutline16 size={14} />}
           onClick={() => { setDialog({ open: true, editing: undefined }) }}
         >
-          添加服务器
+          {t('action.addServer')}
         </Button>
       </div>
       {error !== undefined && <p className={styles.error}>{error}</p>}
-      {data === undefined && error === undefined && <p className={css.loading}>加载中…</p>}
+      {data === undefined && error === undefined && <p className={css.loading}>{t('loading')}</p>}
       {data !== undefined && servers.length === 0 && (
-        <p className={css.empty}>还没有配置 MCP 服务器。点击右上角「添加服务器」接入第一个。</p>
+        <p className={css.empty}>{t('empty')}</p>
       )}
       {servers.length > 0 && (
         <div className={css.table}>
           {servers.map((server) => {
-            const status = statusOf(server)
+            const status = statusOf(server, t)
             return (
               <div key={server.id} className={css.row} data-disabled={server.enabled ? undefined : 'true'}>
                 <span className={css.status}>
@@ -399,34 +403,34 @@ export function McpPage() {
                 <span className={css.chip}>{server.transport === 'stdio' ? 'stdio' : 'http'}</span>
                 <span className={css.summary} title={server.summary}>{server.summary}</span>
                 <span className={css.chip} data-tone={server.toolCount > 0 ? 'brand' : undefined}>
-                  {server.toolCount} 个工具
+                  {t('tools.count', { count: server.toolCount })}
                 </span>
                 {!server.managed && (
-                  <Tooltip label="由其他配置层提供，仅可在此禁用" side="top">
-                    <span className={css.chip}>外部</span>
+                  <Tooltip label={t('external.tip')} side="top">
+                    <span className={css.chip}>{t('external')}</span>
                   </Tooltip>
                 )}
-                <Tooltip label={server.enabled ? '禁用' : '启用'} side="top">
+                <Tooltip label={server.enabled ? t('action.disable') : t('action.enable')} side="top">
                   <button
                     type="button"
                     className={css.switch}
                     data-on={server.enabled ? 'true' : undefined}
                     role="switch"
                     aria-checked={server.enabled}
-                    aria-label={server.enabled ? '禁用 ' + server.serverName : '启用 ' + server.serverName}
+                    aria-label={t(server.enabled ? 'action.disable' : 'action.enable') + ' ' + server.serverName}
                     disabled={busy === server.id}
                     onClick={() => {
                       run(server.id, api.mcpState({ id: server.id, disabled: server.enabled }),
-                        server.enabled ? '已禁用，正在热重载…' : '已启用，正在热重载…')
+                        server.enabled ? t('toast.disabled') : t('toast.enabled'))
                     }}
                   />
                 </Tooltip>
                 <span className={css.actions}>
-                  <Tooltip label={server.managed ? '编辑' : '仅用户级补丁管理的服务器可编辑'} side="top">
+                  <Tooltip label={server.managed ? t('action.edit') : t('edit.unmanagedTip')} side="top">
                     <button
                       type="button"
                       className={css.iconButton}
-                      aria-label={'编辑 ' + server.serverName}
+                      aria-label={t('action.edit') + ' ' + server.serverName}
                       disabled={!server.managed || busy === server.id}
                       onClick={() => { setDialog({ open: true, editing: server.id }) }}
                     >
@@ -436,27 +440,27 @@ export function McpPage() {
                   {confirmDelete === server.id
                     ? (
                       <span className={css.confirm}>
-                        确认删除？
+                        {t('delete.confirm')}
                         <Button
                           variant="primary"
                           size="sm"
                           disabled={busy === server.id}
                           onClick={() => {
-                            run(server.id, api.mcpDelete(server.id), '已删除，正在热重载…')
+                            run(server.id, api.mcpDelete(server.id), t('toast.deleted'))
                           }}
                         >
-                          删除
+                          {t('action.delete')}
                         </Button>
-                        <Button variant="ghost" size="sm" onClick={() => { setConfirmDelete(undefined) }}>取消</Button>
+                        <Button variant="ghost" size="sm" onClick={() => { setConfirmDelete(undefined) }}>{t('action.cancel')}</Button>
                       </span>
                     )
                     : (
-                      <Tooltip label={server.managed ? '删除' : '仅用户级补丁管理的服务器可删除'} side="top">
+                      <Tooltip label={server.managed ? t('action.delete') : t('delete.unmanagedTip')} side="top">
                         <button
                           type="button"
                           className={css.iconButton}
                           data-danger="true"
-                          aria-label={'删除 ' + server.serverName}
+                          aria-label={t('action.delete') + ' ' + server.serverName}
                           disabled={!server.managed || busy === server.id}
                           onClick={() => { setConfirmDelete(server.id) }}
                         >
@@ -475,6 +479,7 @@ export function McpPage() {
           editing={dialog.editing}
           onClose={() => { setDialog({ open: false, editing: undefined }) }}
           onSaved={afterMutation}
+          t={t}
         />
       )}
       {toast !== undefined && (

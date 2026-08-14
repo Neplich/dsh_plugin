@@ -6,6 +6,8 @@
  */
 export { orderRoots, ScopeBar, useRoots } from './ScopeBar.tsx'
 export type { RootsState, ScopeBarProps } from './ScopeBar.tsx'
+export { sharedScopeEn, sharedScopeZh } from './locales.ts'
+export type { SharedScopeKey, SharedScopeTranslate } from './locales.ts'
 export { SectionShell } from './SectionShell.tsx'
 export type { SectionShellProps } from './SectionShell.tsx'
 export { ensureSharedStyles, styles } from './styles.ts'
