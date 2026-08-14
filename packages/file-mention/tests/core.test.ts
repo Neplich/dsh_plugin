@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import {
-  isAllowedOrigin, isBinaryContent, rankFiles, resolveRealWithin, resolveWithin, walkFiles,
+  isAllowedOrigin, isBinaryContent, resolveRealWithin, resolveWithin, walkFiles,
 } from '../src/core.ts'
 
 let root: string
@@ -47,37 +47,6 @@ describe('walkFiles', () => {
     await symlink(join(root, 'real'), join(root, 'src/link'))
     const { files } = await walkFiles(root, { ignoreDirs: ['node_modules', '.git'], maxEntries: 100 })
     expect(files.map(file => file.path)).not.toContain('src/link/hidden.ts')
-  })
-})
-
-describe('rankFiles', () => {
-  const files = [
-    { path: 'README.md', name: 'README.md', dir: '' },
-    { path: 'src/client/MenuView.tsx', name: 'MenuView.tsx', dir: 'src/client' },
-    { path: 'src/client/index.ts', name: 'index.ts', dir: 'src/client' },
-    { path: 'src/index.ts', name: 'index.ts', dir: 'src' },
-  ]
-
-  it('answers the leading slice on an empty query', () => {
-    expect(rankFiles(files, '', 2).map(file => file.path)).toEqual(['README.md', 'src/client/MenuView.tsx'])
-  })
-
-  it('ranks basename prefix over path containment', () => {
-    expect(rankFiles(files, 'index', 10).map(file => file.path)).toEqual(['src/index.ts', 'src/client/index.ts'])
-  })
-
-  it('matches directory segments through the full path', () => {
-    expect(rankFiles(files, 'client', 10).map(file => file.path)).toEqual([
-      'src/client/index.ts', 'src/client/MenuView.tsx',
-    ])
-  })
-
-  it('falls back to subsequence matching', () => {
-    expect(rankFiles(files, 'mvtsx', 10).map(file => file.path)).toEqual(['src/client/MenuView.tsx'])
-  })
-
-  it('drops non-matches', () => {
-    expect(rankFiles(files, 'zzz', 10)).toEqual([])
   })
 })
 

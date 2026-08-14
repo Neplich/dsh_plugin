@@ -3,8 +3,11 @@
  * server that the browser source (src/client) drives while composing a prompt.
  *
  *   GET /file-mention/search?session=<id>&q=<query>
- *       Walks the session's cwd (bounded, ignore-listed, briefly cached) and
- *       answers the ranked top matches as JSON.
+ *       Walks the session's cwd (bounded, ignore-listed, single-flight cached
+ *       per cwd) and answers either the listing (empty query: capped at
+ *       maxListed, with a `complete` flag the client turns into zero-latency
+ *       local filtering) or the ranked top matches (non-empty query: the
+ *       client fallback for trees too big to cache).
  *   GET /file-mention/read?session=<id>&path=<relative>
  *       Answers one file's text content as JSON, confined to the session cwd
  *       (lexical + realpath escape checks), size-bounded, binary-refused.
@@ -25,9 +28,10 @@ import type {} from '@deepseek-ai/dsh-agent'
 import type {} from '@deepseek-ai/dsh-host-webserver'
 import Schema from '@deepseek-ai/schemastery'
 import {
-  isAllowedOrigin, isBinaryContent, rankFiles, resolveRealWithin, resolveWithin,
-  walkFiles, type WalkResult,
+  isAllowedOrigin, isBinaryContent, resolveRealWithin,
+  resolveWithin, walkFiles, type WalkResult,
 } from './core.ts'
+import { filterMatches } from './shared/rank.ts'
 
 /** Cordis plugin name used by loader diagnostics. */
 export const name = 'file-mention'
@@ -42,8 +46,10 @@ export const inject = ['agents', 'webServer']
 
 /** Deployment-tunable bounds. Invalid values fail plugin load. */
 export interface Config {
-  /** Maximum menu candidates one search answers. */
+  /** Maximum menu candidates one server-side (fallback) search answers. */
   maxResults: number
+  /** Maximum listing rows the client caches for local filtering; bigger trees fall back to per-keystroke server search. */
+  maxListed: number
   /** Maximum file size in bytes one read (and thus one mention) inlines. */
   maxFileBytes: number
   /** Maximum walk entries (files + directories) visited per cwd scan. */
@@ -57,6 +63,7 @@ export interface Config {
 /** Schemastery validation for {@link Config}. */
 export const Config: Schema<Config> = Schema.object({
   maxResults: Schema.natural().default(20),
+  maxListed: Schema.natural().default(5000),
   maxFileBytes: Schema.natural().default(128 * 1024),
   maxWalkEntries: Schema.natural().default(20000),
   cacheTtlMs: Schema.natural().default(3000),
@@ -86,17 +93,19 @@ export function apply(ctx: Context, config: Config) {
     return ctx.agents.get(session as SessionId)?.session.header.cwd
   }
 
-  // Per-cwd walk cache: a menu session is a burst of keystrokes over one tree.
-  const walks = new Map<string, { at: number, result: WalkResult }>()
-  const walkCached = async (cwd: string): Promise<WalkResult> => {
+  // Per-cwd walk cache, single-flight: a menu session is a burst of
+  // keystrokes over one tree, and concurrent keystrokes inside one walk share
+  // its promise instead of stampeding the filesystem.
+  const walks = new Map<string, { at: number, promise: Promise<WalkResult> }>()
+  const walkCached = (cwd: string): Promise<WalkResult> => {
     const cached = walks.get(cwd)
-    if (cached !== undefined && Date.now() - cached.at < config.cacheTtlMs) return cached.result
-    const result = await walkFiles(cwd, {
+    if (cached !== undefined && Date.now() - cached.at < config.cacheTtlMs) return cached.promise
+    const promise = walkFiles(cwd, {
       ignoreDirs: config.ignoreDirs,
       maxEntries: config.maxWalkEntries,
     })
-    walks.set(cwd, { at: Date.now(), result })
-    return result
+    walks.set(cwd, { at: Date.now(), promise })
+    return promise
   }
 
   /** Shared preflight: origin fence plus request-target parsing. */
@@ -121,10 +130,15 @@ export function apply(ctx: Context, config: Config) {
       }
       try {
         const walk = await walkCached(cwd)
-        send(res, 200, {
-          files: rankFiles(walk.files, url.searchParams.get('q') ?? '', config.maxResults),
-          truncated: walk.truncated,
-        })
+        const query = url.searchParams.get('q') ?? ''
+        // complete = the listing is the whole tree: the client filters
+        // locally (zero-latency keystrokes). Otherwise it falls back to
+        // per-keystroke server search, ranked here over the full walk.
+        const complete = !walk.truncated && walk.files.length <= config.maxListed
+        const files = query === ''
+          ? walk.files.slice(0, config.maxListed)
+          : filterMatches(walk.files, query).slice(0, config.maxResults)
+        send(res, 200, { files, complete, pageSize: config.maxResults })
       } catch (error) {
         send(res, 500, { error: `walk failed: ${String(error)}` })
       }

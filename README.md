@@ -19,7 +19,7 @@ A package becomes an installable **bundle** by declaring `"dsh": { "bundle": { "
 | Package | Description |
 |---|---|
 | [`@neplich/dsh-greet`](packages/greet/README.md) | Example plugin: a minimal `greet` tool — the starting template for new packages |
-| [`@neplich/dsh-file-mention`](packages/file-mention/README.md) | Web GUI plugin: `@` file mentions in the composer; mentioned files are inlined into the prompt as `<file path="...">...</file>` |
+| [`@neplich/dsh-file-mention`](packages/file-mention/README.md) | Web GUI plugin: `@` file mentions in the composer (cached local substring filter, icon-marked chips, multi-file references); mentioned files are inlined into the prompt as `<file path="...">...</file>` |
 
 Every finished plugin ships a `README.md` in its package directory describing its function (features, config, install); the table above links to it. Keep the table in sync with `packages/`: any plugin addition, removal, or major update must update the plugin README and this table in the same change.
 

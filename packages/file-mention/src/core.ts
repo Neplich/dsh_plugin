@@ -1,21 +1,14 @@
 /**
- * Pure file-walk / ranking / path-safety core of @neplich/dsh-file-mention.
- * No cordis, no HTTP — the host route handlers in index.ts compose these.
+ * Node-side core of @neplich/dsh-file-mention: the bounded workspace walk and
+ * the path/content safety checks behind the host routes in index.ts. Ranking
+ * and display-row logic live in shared/rank.ts (inlined by the browser
+ * bundle); this module never reaches the browser.
  *
  * @module @neplich/dsh-file-mention/core
  */
 import { readdir, realpath } from 'node:fs/promises'
 import { isAbsolute, resolve, sep } from 'node:path'
-
-/** One walkable file, addressed relative to the session cwd with posix separators. */
-export interface FileEntry {
-  /** Relative posix path from the session cwd, e.g. `src/client/index.ts`. */
-  readonly path: string
-  /** Basename, e.g. `index.ts`. */
-  readonly name: string
-  /** Containing directory relative to the cwd (`''` at the root), e.g. `src/client`. */
-  readonly dir: string
-}
+import type { FileEntry } from './shared/rank.ts'
 
 /** Walk bounds. */
 export interface WalkOptions {
@@ -81,51 +74,6 @@ export async function walkFiles(root: string, options: WalkOptions): Promise<Wal
   }
   files.sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0))
   return { files, truncated }
-}
-
-/** Case-insensitive subsequence test (fuzzy fallback tier). */
-function isSubsequence(needle: string, haystack: string): boolean {
-  let i = 0
-  for (const char of haystack) {
-    if (char === needle[i]) i += 1
-    if (i === needle.length) return true
-  }
-  return needle.length === 0
-}
-
-/** Rank tier: lower scores surface first. */
-function score(entry: FileEntry, query: string): number {
-  const name = entry.name.toLowerCase()
-  const path = entry.path.toLowerCase()
-  if (name.startsWith(query)) return 0
-  if (name.includes(query)) return 1
-  if (path.includes(query)) return 2
-  if (isSubsequence(query, path)) return 3
-  return -1
-}
-
-/**
- * Filter and rank one walked file set against a menu query. An empty query
- * answers the leading slice of the path-sorted set.
- * @param files - walked entries (already path-sorted).
- * @param query - raw menu query.
- * @param maxResults - result cap.
- * @returns the top matches, best tier first, shorter paths first within a tier.
- */
-export function rankFiles(
-  files: readonly FileEntry[],
-  query: string,
-  maxResults: number,
-): FileEntry[] {
-  const q = query.trim().toLowerCase()
-  if (q === '') return files.slice(0, maxResults)
-  return files
-    .map(entry => ({ entry, tier: score(entry, q) }))
-    .filter(match => match.tier >= 0)
-    .sort((a, b) => a.tier - b.tier || a.entry.path.length - b.entry.path.length
-      || (a.entry.path < b.entry.path ? -1 : a.entry.path > b.entry.path ? 1 : 0))
-    .slice(0, maxResults)
-    .map(match => match.entry)
 }
 
 /**
