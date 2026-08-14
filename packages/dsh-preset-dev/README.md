@@ -32,11 +32,11 @@ dsh plugin --profile <name> add @neplich/dsh-preset-dev   # npm 发布后
 dsh plugin --profile <name> remove @neplich/dsh-preset-dev
 ```
 
-已安装的 preset 文件**不会**被自动删除（你可能正在使用该模式）；如需清理：
+已安装的 preset 文件**不会**被自动删除（你可能正在使用该模式）；完整清理：
 
-```sh
-rm -rf ~/.dsh/.agent-presets/dev
-```
+1. 删除预设目录：`rm -rf ~/.dsh/.agent-presets/dev`
+2. 若曾把「开发模式」设为默认（`$DSH_HOME/settings.yaml` 里 `agent-presets.default: dev`），必须一并复位或删除该字段 —— 否则新会话会因默认预设无法解析而创建失败（GUI：设置 → Agent 预设 → 将其他预设设为默认）。
+3. 重启 `dsh` 后确认预设选择器中不再出现「开发模式」，新会话可正常创建。
 
 ## 升级 / 刷新
 
