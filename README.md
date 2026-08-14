@@ -18,10 +18,10 @@ A package becomes an installable **bundle** by declaring `"dsh": { "bundle": { "
 
 | Package | Description |
 |---|---|
-| [`@neplich/dsh-greet`](packages/greet/) | Example plugin: a minimal `greet` tool — the starting template for new packages |
-| [`@neplich/dsh-file-mention`](packages/file-mention/) | Web GUI plugin: `@` file mentions in the composer; mentioned files are inlined into the prompt as `<file path="...">...</file>` |
+| [`@neplich/dsh-greet`](packages/greet/README.md) | Example plugin: a minimal `greet` tool — the starting template for new packages |
+| [`@neplich/dsh-file-mention`](packages/file-mention/README.md) | Web GUI plugin: `@` file mentions in the composer; mentioned files are inlined into the prompt as `<file path="...">...</file>` |
 
-Keep this table in sync with `packages/`: any plugin addition, removal, or major update must update it in the same change.
+Every finished plugin ships a `README.md` in its package directory describing its function (features, config, install); the table above links to it. Keep the table in sync with `packages/`: any plugin addition, removal, or major update must update the plugin README and this table in the same change.
 
 ## Commands
 
@@ -37,7 +37,8 @@ pnpm run clean   # remove build outputs
 1. Copy `packages/greet` to `packages/<name>` and rename the package to `@neplich/dsh-<name>` in `package.json`.
 2. Update the plugin row in `cordis.patch.yml` (both `id` and `name`) and `name` in `src/index.ts`.
 3. Add `{ "path": "packages/<name>" }` to the root `tsconfig.json` references.
-4. `pnpm install && pnpm run build && pnpm run test`.
+4. Write `packages/<name>/README.md` describing the plugin's function, config, and install, and link it from the [Plugins](#plugins) table above.
+5. `pnpm install && pnpm run build && pnpm run test`.
 
 Choose the extension point before writing code — tool, hook, LLM adapter, command, capability seam — with the `dsh-plugin-development` agent skill and the upstream [extension cookbook](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/cookbook/extension-cookbook.md).
 
