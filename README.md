@@ -18,7 +18,6 @@ A package becomes an installable **bundle** by declaring `"dsh": { "bundle": { "
 
 | Package | Description | README |
 |---|---|---|
-| `@neplich/dsh-greet` | Example plugin: a minimal `greet` tool — the starting template for new packages | [README](packages/dsh-greet/README.md) |
 | `@neplich/dsh-file-mention` | Web GUI plugin: `@` file mentions in the composer (cached local substring filter, icon-marked chips, multi-file references); mentioned files are inlined into the prompt as `<file path="...">...</file>` | [README](packages/dsh-file-mention/README.md) |
 | `@neplich/dsh-config-skills` | Web GUI plugin: a 技能 settings section — read-only browser of personal (`~/.dsh`/`~/.agents`) and project (`<root>/.dsh`/`<root>/.agents`) skills with source badges and shadowing | [README](packages/dsh-config-skills/README.md) |
 | `@neplich/dsh-config-instructions` | Web GUI plugin: an 指令文档 settings section — view and edit personal and project-root AGENTS.md / AGENTS.local.md files (atomic writes, live effect) | [README](packages/dsh-config-instructions/README.md) |
@@ -40,7 +39,7 @@ pnpm run clean   # remove build outputs
 
 ## Add a plugin
 
-1. Copy `packages/dsh-greet` to `packages/dsh-<name>` (directory name must start with `dsh-` and match the package suffix) and rename the package to `@neplich/dsh-<name>` in `package.json`.
+1. Create `packages/dsh-<name>/` (directory name must start with `dsh-` and match the package suffix) with `package.json` (`name: @neplich/dsh-<name>` plus the `dsh.bundle` declaration), `src/index.ts`, `tsconfig.json`, `tests/` and `README.md`.
 2. Update the plugin row in `cordis.patch.yml` (both `id` and `name`) and `name` in `src/index.ts`.
 3. Add `{ "path": "packages/dsh-<name>" }` to the root `tsconfig.json` references.
 4. Write `packages/dsh-<name>/README.md` describing the plugin's function, config, and install, and link it from the [Plugins](#plugins) table above.
@@ -54,8 +53,8 @@ Choose the extension point before writing code — tool, hook, LLM adapter, comm
 
 ```sh
 pnpm run build
-dsh plugin --profile demo add ./packages/dsh-greet   # links the checkout into the profile
-dsh --profile demo                               # boot; ask the model to greet someone
+dsh plugin --profile demo add ./packages/dsh-<name>   # links the checkout into the profile
+dsh --profile demo                                   # boot the profile
 ```
 
 During active development against a source checkout of deepseek-harness, a `--patch` overlay can load `src/index.ts` directly without building; see [Your first plugin](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/index.md).

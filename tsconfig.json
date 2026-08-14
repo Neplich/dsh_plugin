@@ -2,9 +2,6 @@
   "files": [],
   "references": [
     {
-      "path": "packages/dsh-greet"
-    },
-    {
       "path": "packages/dsh-file-mention"
     },
     {
