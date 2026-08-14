@@ -18,7 +18,7 @@ importers:
         specifier: ^4.1.8
         version: 4.1.10(@types/node@22.20.1)(vite@8.2.1(@types/node@22.20.1)(yaml@2.9.0))
 
-  packages/config-instructions:
+  packages/dsh-config-instructions:
     dependencies:
       '@deepseek-ai/schemastery':
         specifier: ^3.18.1
@@ -44,7 +44,7 @@ importers:
         version: 0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1))
       '@neplich/dsh-config-shared':
         specifier: workspace:^
-        version: link:../config-shared
+        version: link:../dsh-config-shared
       '@types/react':
         specifier: ~18.3.1
         version: 18.3.31
@@ -64,7 +64,7 @@ importers:
         specifier: ^0.22.2
         version: 0.22.14(typescript@6.0.3)
 
-  packages/config-mcp:
+  packages/dsh-config-mcp:
     dependencies:
       '@deepseek-ai/schemastery':
         specifier: ^3.18.1
@@ -90,7 +90,7 @@ importers:
         version: 0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1))
       '@neplich/dsh-config-shared':
         specifier: workspace:^
-        version: link:../config-shared
+        version: link:../dsh-config-shared
       '@types/react':
         specifier: ~18.3.1
         version: 18.3.31
@@ -113,7 +113,7 @@ importers:
         specifier: ^2.9.0
         version: 2.9.0
 
-  packages/config-shared:
+  packages/dsh-config-shared:
     devDependencies:
       '@deepseek-ai/cordis':
         specifier: ^4.0.1
@@ -134,7 +134,7 @@ importers:
         specifier: ^18.2.0
         version: 18.3.1
 
-  packages/config-skills:
+  packages/dsh-config-skills:
     dependencies:
       '@deepseek-ai/schemastery':
         specifier: ^3.18.1
@@ -160,7 +160,7 @@ importers:
         version: 0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1))
       '@neplich/dsh-config-shared':
         specifier: workspace:^
-        version: link:../config-shared
+        version: link:../dsh-config-shared
       '@types/react':
         specifier: ~18.3.1
         version: 18.3.31
@@ -183,13 +183,7 @@ importers:
         specifier: ^2.9.0
         version: 2.9.0
 
-  packages/dsh-preset-dev:
-    devDependencies:
-      '@deepseek-ai/cordis':
-        specifier: ^4.0.1
-        version: 4.0.1(@deepseek-ai/cordis-plugin-include@1.0.6)(@deepseek-ai/cordis-plugin-loader@1.0.2)
-
-  packages/file-mention:
+  packages/dsh-file-mention:
     dependencies:
       '@deepseek-ai/schemastery':
         specifier: ^3.18.1
@@ -217,7 +211,7 @@ importers:
         specifier: ^0.22.2
         version: 0.22.14(typescript@6.0.3)
 
-  packages/greet:
+  packages/dsh-greet:
     dependencies:
       '@deepseek-ai/schemastery':
         specifier: ^3.18.1
@@ -229,6 +223,12 @@ importers:
       '@deepseek-ai/dsh-tools':
         specifier: ^0.1.0-rc.5
         version: 0.1.0-rc.6(f8724372086ccc1457fc84e7becee2e0)
+
+  packages/dsh-preset-dev:
+    devDependencies:
+      '@deepseek-ai/cordis':
+        specifier: ^4.0.1
+        version: 4.0.1(@deepseek-ai/cordis-plugin-include@1.0.6)(@deepseek-ai/cordis-plugin-loader@1.0.2)
 
 packages:
 

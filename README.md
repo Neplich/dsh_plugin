@@ -5,7 +5,7 @@ A collection of [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harne
 ## Layout
 
 ```
-packages/<name>/       one plugin per directory, published as @neplich/dsh-<name>
+packages/dsh-<name>/   one plugin per directory (dir name starts with dsh-), published as @neplich/dsh-<name>
   package.json         npm manifest + dsh.bundle declaration
   cordis.patch.yml     the layer applied when a profile installs this bundle
   src/index.ts         function plugin: name / inject / Config / apply
@@ -18,14 +18,14 @@ A package becomes an installable **bundle** by declaring `"dsh": { "bundle": { "
 
 | Package | Description | README |
 |---|---|---|
-| `@neplich/dsh-greet` | Example plugin: a minimal `greet` tool — the starting template for new packages | [README](packages/greet/README.md) |
-| `@neplich/dsh-file-mention` | Web GUI plugin: `@` file mentions in the composer (cached local substring filter, icon-marked chips, multi-file references); mentioned files are inlined into the prompt as `<file path="...">...</file>` | [README](packages/file-mention/README.md) |
-| `@neplich/dsh-config-skills` | Web GUI plugin: a 技能 settings section — read-only browser of personal (`~/.dsh`/`~/.agents`) and project (`<root>/.dsh`/`<root>/.agents`) skills with source badges and shadowing | [README](packages/config-skills/README.md) |
-| `@neplich/dsh-config-instructions` | Web GUI plugin: an 指令文档 settings section — view and edit personal and project-root AGENTS.md / AGENTS.local.md files (atomic writes, live effect) | [README](packages/config-instructions/README.md) |
-| `@neplich/dsh-config-mcp` | Web GUI plugin: an MCP 服务 settings section — live server status, add/edit/toggle/delete written to the user-level cordis.patch.yml with automatic HMR reload | [README](packages/config-mcp/README.md) |
+| `@neplich/dsh-greet` | Example plugin: a minimal `greet` tool — the starting template for new packages | [README](packages/dsh-greet/README.md) |
+| `@neplich/dsh-file-mention` | Web GUI plugin: `@` file mentions in the composer (cached local substring filter, icon-marked chips, multi-file references); mentioned files are inlined into the prompt as `<file path="...">...</file>` | [README](packages/dsh-file-mention/README.md) |
+| `@neplich/dsh-config-skills` | Web GUI plugin: a 技能 settings section — read-only browser of personal (`~/.dsh`/`~/.agents`) and project (`<root>/.dsh`/`<root>/.agents`) skills with source badges and shadowing | [README](packages/dsh-config-skills/README.md) |
+| `@neplich/dsh-config-instructions` | Web GUI plugin: an 指令文档 settings section — view and edit personal and project-root AGENTS.md / AGENTS.local.md files (atomic writes, live effect) | [README](packages/dsh-config-instructions/README.md) |
+| `@neplich/dsh-config-mcp` | Web GUI plugin: an MCP 服务 settings section — live server status, add/edit/toggle/delete written to the user-level cordis.patch.yml with automatic HMR reload | [README](packages/dsh-config-mcp/README.md) |
 | `@neplich/dsh-preset-dev` | Agent preset installer: installs the 开发模式 (dev) preset — standard coding agent plus the cordis toolset — into the user preset root | [README](packages/dsh-preset-dev/README.md) |
 
-The three config plugins share code through `packages/config-shared` (`@neplich/dsh-config-shared`), an internal library inlined at build time — not itself a plugin.
+The three config plugins share code through `packages/dsh-config-shared` (`@neplich/dsh-config-shared`), an internal library inlined at build time — not itself a plugin.
 
 Every finished plugin ships a `README.md` in its package directory describing its function (features, config, install); the table above links to it. Keep the table in sync with `packages/`: any plugin addition, removal, or major update must update the plugin README and this table in the same change.
 
@@ -40,10 +40,10 @@ pnpm run clean   # remove build outputs
 
 ## Add a plugin
 
-1. Copy `packages/greet` to `packages/<name>` and rename the package to `@neplich/dsh-<name>` in `package.json`.
+1. Copy `packages/dsh-greet` to `packages/dsh-<name>` (directory name must start with `dsh-` and match the package suffix) and rename the package to `@neplich/dsh-<name>` in `package.json`.
 2. Update the plugin row in `cordis.patch.yml` (both `id` and `name`) and `name` in `src/index.ts`.
-3. Add `{ "path": "packages/<name>" }` to the root `tsconfig.json` references.
-4. Write `packages/<name>/README.md` describing the plugin's function, config, and install, and link it from the [Plugins](#plugins) table above.
+3. Add `{ "path": "packages/dsh-<name>" }` to the root `tsconfig.json` references.
+4. Write `packages/dsh-<name>/README.md` describing the plugin's function, config, and install, and link it from the [Plugins](#plugins) table above.
 5. `pnpm install && pnpm run build && pnpm run test`.
 
 > **Installability**: plugin source must install and build in any environment after cloning. Depend on harness packages with npm-registry semver ranges in `devDependencies` (matching `peerDependencies`), never `link:../../../deepseek-harness/...` sibling-checkout paths; use the pnpm `workspace:` protocol for in-repo dependencies. Re-run a full `pnpm install` (not just the existing `node_modules`) after any dependency change.
@@ -54,7 +54,7 @@ Choose the extension point before writing code — tool, hook, LLM adapter, comm
 
 ```sh
 pnpm run build
-dsh plugin --profile demo add ./packages/greet   # links the checkout into the profile
+dsh plugin --profile demo add ./packages/dsh-greet   # links the checkout into the profile
 dsh --profile demo                               # boot; ask the model to greet someone
 ```
 

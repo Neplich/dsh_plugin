@@ -2,22 +2,22 @@
   "files": [],
   "references": [
     {
-      "path": "packages/greet"
+      "path": "packages/dsh-greet"
     },
     {
-      "path": "packages/file-mention"
+      "path": "packages/dsh-file-mention"
     },
     {
-      "path": "packages/config-shared"
+      "path": "packages/dsh-config-shared"
     },
     {
-      "path": "packages/config-skills"
+      "path": "packages/dsh-config-skills"
     },
     {
-      "path": "packages/config-instructions"
+      "path": "packages/dsh-config-instructions"
     },
     {
-      "path": "packages/config-mcp"
+      "path": "packages/dsh-config-mcp"
     },
     {
       "path": "packages/dsh-preset-dev"

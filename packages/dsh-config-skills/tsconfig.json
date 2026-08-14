@@ -11,6 +11,6 @@
     "src"
   ],
   "references": [
-    { "path": "../config-shared" }
+    { "path": "../dsh-config-shared" }
   ]
 }
