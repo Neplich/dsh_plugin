@@ -1,0 +1,3 @@
+- insert:
+    - id: config-instructions
+      name: '@neplich/dsh-config-instructions'

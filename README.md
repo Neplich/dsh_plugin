@@ -20,6 +20,11 @@ A package becomes an installable **bundle** by declaring `"dsh": { "bundle": { "
 |---|---|
 | [`@neplich/dsh-greet`](packages/greet/README.md) | Example plugin: a minimal `greet` tool — the starting template for new packages |
 | [`@neplich/dsh-file-mention`](packages/file-mention/README.md) | Web GUI plugin: `@` file mentions in the composer (cached local substring filter, icon-marked chips, multi-file references); mentioned files are inlined into the prompt as `<file path="...">...</file>` |
+| [`@neplich/dsh-config-skills`](packages/config-skills/README.md) | Web GUI plugin: a 技能 settings section — read-only browser of personal (`~/.dsh`/`~/.agents`) and project (`<root>/.dsh`/`<root>/.agents`) skills with source badges and shadowing |
+| [`@neplich/dsh-config-instructions`](packages/config-instructions/README.md) | Web GUI plugin: an 指令文档 settings section — view and edit personal and project-root AGENTS.md / AGENTS.local.md files (atomic writes, live effect) |
+| [`@neplich/dsh-config-mcp`](packages/config-mcp/README.md) | Web GUI plugin: an MCP 服务 settings section — live server status, add/edit/toggle/delete written to the user-level cordis.patch.yml with automatic HMR reload |
+
+The three config plugins share code through `packages/config-shared` (`@neplich/dsh-config-shared`), an internal library inlined at build time — not itself a plugin.
 
 Every finished plugin ships a `README.md` in its package directory describing its function (features, config, install); the table above links to it. Keep the table in sync with `packages/`: any plugin addition, removal, or major update must update the plugin README and this table in the same change.
 

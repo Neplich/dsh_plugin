@@ -1,0 +1,3 @@
+- insert:
+    - id: config-mcp
+      name: '@neplich/dsh-config-mcp'

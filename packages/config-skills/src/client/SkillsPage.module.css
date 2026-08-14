@@ -1,0 +1,126 @@
+/* SkillsPage: read-only skill listing with per-row expansion. */
+
+.table {
+  display: flex;
+  flex-direction: column;
+  margin-top: 12px;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 10px;
+  box-sizing: border-box;
+  /* Panel height comes from the viewport (see SkillsPage); long lists scroll inside. */
+  overflow-y: auto;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--dsw-alias-bg-layer-2);
+  cursor: pointer;
+  border: none;
+  border-top: 1px solid var(--dsw-alias-border-l2);
+  text-align: left;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.row:first-child {
+  border-top: none;
+}
+
+.row:hover {
+  background: var(--dsw-alias-interactive-bg-hover);
+}
+
+.row[data-shadowed="true"] {
+  opacity: 0.5;
+}
+
+.name {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--dsw-alias-label-primary);
+  flex-shrink: 0;
+}
+
+.desc {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  color: var(--dsw-alias-label-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chips {
+  display: inline-flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.chip {
+  font-size: 11px;
+  line-height: 1;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--dsw-alias-bg-layer-3);
+  color: var(--dsw-alias-label-secondary);
+  white-space: nowrap;
+}
+
+.chip[data-tone="brand"] {
+  color: var(--dsw-alias-brand-primary);
+}
+
+.chip[data-tone="warn"] {
+  color: var(--dsw-alias-label-error);
+}
+
+.detail {
+  padding: 12px 14px;
+  border-top: 1px solid var(--dsw-alias-border-l2);
+  background: var(--dsw-alias-bg-layer-3);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.detailBody {
+  margin: 0;
+  padding: 10px;
+  border-radius: 8px;
+  background: var(--dsw-alias-bg-layer-2);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--dsw-alias-label-secondary);
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 320px;
+  overflow: auto;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 12px;
+  box-sizing: border-box;
+  /* Panel height comes from the viewport (see SkillsPage), matching the table state. */
+  padding: 20px 14px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--dsw-alias-label-tertiary);
+  border: 1px dashed var(--dsw-alias-border-l2);
+  border-radius: 10px;
+}
+
+.loading {
+  padding: 24px 14px;
+  font-size: 12px;
+  color: var(--dsw-alias-label-tertiary);
+}

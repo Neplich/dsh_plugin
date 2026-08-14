@@ -1,0 +1,3 @@
+- insert:
+    - id: config-skills
+      name: '@neplich/dsh-config-skills'

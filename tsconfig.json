@@ -6,6 +6,18 @@
     },
     {
       "path": "packages/file-mention"
+    },
+    {
+      "path": "packages/config-shared"
+    },
+    {
+      "path": "packages/config-skills"
+    },
+    {
+      "path": "packages/config-instructions"
+    },
+    {
+      "path": "packages/config-mcp"
     }
   ]
 }
