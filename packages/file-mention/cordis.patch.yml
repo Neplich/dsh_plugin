@@ -1,0 +1,3 @@
+- insert:
+    - id: file-mention
+      name: '@neplich/dsh-file-mention'

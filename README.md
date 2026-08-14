@@ -14,6 +14,15 @@ packages/<name>/       one plugin per directory, published as @neplich/dsh-<name
 
 A package becomes an installable **bundle** by declaring `"dsh": { "bundle": { "patch": "./cordis.patch.yml" } }` in its manifest; the patch rows reference the package by name so Node resolution finds the installed build. See the official [Package and install a plugin](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.md) tutorial for the full bundle/profile model.
 
+## Plugins
+
+| Package | Description |
+|---|---|
+| [`@neplich/dsh-greet`](packages/greet/) | Example plugin: a minimal `greet` tool — the starting template for new packages |
+| [`@neplich/dsh-file-mention`](packages/file-mention/) | Web GUI plugin: `@` file mentions in the composer; mentioned files are inlined into the prompt as `<file path="...">...</file>` |
+
+Keep this table in sync with `packages/`: any plugin addition, removal, or major update must update it in the same change.
+
 ## Commands
 
 ```sh
