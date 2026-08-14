@@ -1,0 +1,3 @@
+- insert:
+    - id: preset-dev
+      name: '@neplich/dsh-preset-dev'

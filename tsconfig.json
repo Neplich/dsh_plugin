@@ -18,6 +18,9 @@
     },
     {
       "path": "packages/config-mcp"
+    },
+    {
+      "path": "packages/dsh-preset-dev"
     }
   ]
 }
