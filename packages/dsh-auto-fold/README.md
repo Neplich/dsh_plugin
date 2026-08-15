@@ -1,5 +1,7 @@
 # @neplich/dsh-auto-fold
 
+[中文版](README.zh-CN.md) · English
+
 Web GUI plugin: when an assistant message starts outputting its body text, the plugin automatically collapses every **thinking** (Think) row and **tool-call** row that precedes the body within the same turn, and inserts one slim expand bar in their place. Clicking the bar toggles the records between collapsed and expanded; the bar stays mounted and serves as the "collapse again" button after expanding.
 
 Row-internal state is preserved exactly: folding only flips row visibility (`display`) and hides a Think subtree via CSS — it never rebuilds, replaces, or rewrites the tool-call cards, so an already-expanded tool detail or a user-opened Think disclosure comes back in the same state after expanding.

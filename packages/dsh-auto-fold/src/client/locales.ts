@@ -13,14 +13,14 @@ declare module '@deepseek-ai/dsh-client-ui-slots' {
 
 /** Simplified Chinese expand-bar messages. */
 export const zh = {
-  'bar.folded': '已折叠 {count} 条思考与工具调用记录 · 点击展开',
-  'bar.expanded': '已展开 {count} 条思考与工具调用记录 · 点击收起',
+  'bar.folded': '{count} 条思考与工具调用记录 · 点击展开',
+  'bar.expanded': '{count} 条思考与工具调用记录 · 点击收起',
 } satisfies Record<string, string>
 
 /** English expand-bar messages. */
 export const en = {
-  'bar.folded': 'Collapsed {count} thinking and tool-call records · click to expand',
-  'bar.expanded': 'Expanded {count} thinking and tool-call records · click to collapse',
+  'bar.folded': '{count} thinking and tool-call records · click to expand',
+  'bar.expanded': '{count} thinking and tool-call records · click to collapse',
 } satisfies Record<string, string>
 
 /** Auto-fold expand-bar namespace. */
