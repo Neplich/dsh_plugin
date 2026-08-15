@@ -1,6 +1,6 @@
 {
   "name": "@neplich/dsh-preset-dev",
-  "description": "dsh agent-preset installer: installs the 开发模式 (dev) preset — the standard coding agent plus the cordis runtime-inspection toolset — into the user preset root",
+  "description": "dsh agent-preset installer: installs the Development Mode (dev) preset — the standard coding agent plus the cordis runtime-inspection toolset — into the user preset root",
   "version": "0.1.0",
   "license": "MIT",
   "type": "module",
@@ -16,7 +16,8 @@
   "files": [
     "lib",
     "cordis.patch.yml",
-    "presets"
+    "presets",
+    "README.zh-CN.md"
   ],
   "publishConfig": {
     "access": "public"

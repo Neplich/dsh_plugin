@@ -1,38 +1,40 @@
 # @neplich/dsh-config-skills
 
-dsh Web GUI 插件：在设置面板中新增「技能」分区，只读浏览个人级与项目级的技能（Skills）。
+[中文版](README.zh-CN.md) · English
 
-## 功能
+dsh Web GUI plugin: adds a "Skills" section to the settings panel for read-only browsing of personal- and project-level skills.
 
-- 「个人 / 项目」横向切换：个人级 = `~/.dsh/skills` + `~/.agents/skills`；项目级 = `<项目根>/.dsh/skills` + `<项目根>/.agents/skills`（项目根 = 最近含 `.git` 的祖先目录）
-- 项目页带项目根下拉：选项来自已注册工作区，按工作区排序（与侧边栏一致）
-- 合并列表展示名称、描述、来源徽章（个人/项目 .dsh 或 .agents）、调用方式（仅手动 / 不可手动）与同名覆盖关系（低优先级来源标记「被覆盖」）
-- 点击行展开查看完整 SKILL.md 文档
-- 只读设计：技能内容以文件系统为准，目录变化由 dsh 自身 watcher 自动生效
+## Features
 
-## 国际化
+- "Personal / Project" toggle: personal level = `~/.dsh/skills` + `~/.agents/skills`; project level = `<project root>/.dsh/skills` + `<project root>/.agents/skills` (project root = nearest ancestor directory containing `.git`)
+- The project page carries a project-root dropdown: options come from the registered workspaces, ordered by workspace (same as the sidebar)
+- Merged list showing name, description, source badge (personal/project .dsh or .agents), invocation mode (manual-only / not manual), and same-name shadowing relationships (lower-priority sources marked "shadowed")
+- Clicking a row expands to show the full SKILL.md document
+- Read-only by design: skill content follows the filesystem; directory changes take effect automatically through dsh's own watcher
 
-全部界面文案（分区标题、导航项、来源徽章、状态提示）通过 `config-skills` locale namespace 提供中英双语，随 dsh 设置中的语言切换即时自适应。服务端返回的错误消息保持英文（协议层中立文案）。
+## Internationalization
 
-## 安装
+All UI copy (section title, navigation items, source badges, status hints) ships in zh and en through the `config-skills` locale namespace and adapts live to the language set in dsh settings. Server-returned error messages stay in English (protocol-level neutral copy).
+
+## Install
 
 ```sh
 dsh plugin --profile <name> add @neplich/dsh-config-skills
-dsh web --profile <name>     # 插件集变化需重启生效
+dsh web --profile <name>     # plugin-set changes require a restart
 ```
 
-仅在 `dsh web` profile 中可用（依赖 `ctx.webServer`）。
+Available only in a `dsh web` profile (depends on `ctx.webServer`).
 
-## 配置
+## Config
 
-| 字段 | 默认 | 说明 |
+| Field | Default | Description |
 |---|---|---|
-| `maxFileBytes` | 524288 | 单个 SKILL.md 的读取上限 |
+| `maxFileBytes` | 524288 | Read size cap for a single SKILL.md |
 
-## 安全
+## Security
 
-全部路由仅接受同源请求；项目级读取校验 root 必须来自工作区注册表；文件路径由服务端推导。
+All routes accept same-origin requests only; project-level reads verify the root comes from the workspace registry; file paths are derived server-side.
 
-## 已知限制
+## Known Limitations
 
-- 技能为只读；新建/删除技能请直接操作目录（个人：`~/.dsh/skills` 与 `~/.agents/skills`；项目：`<项目根>/.dsh/skills` 与 `<项目根>/.agents/skills`，同名时 .dsh 优先）
+- Skills are read-only; create/delete skills by editing the directories directly (personal: `~/.dsh/skills` and `~/.agents/skills`; project: `<project root>/.dsh/skills` and `<project root>/.agents/skills`; `.dsh` wins on same-name collisions)

@@ -1,5 +1,7 @@
 # dsh_plugin
 
+[中文版](README.zh-CN.md) · English
+
 A collection of [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin bundles. Each package under `packages/` is one installable dsh plugin; this repository only manages them together — it is not itself a plugin.
 
 ## Layout
@@ -9,6 +11,8 @@ packages/dsh-<name>/   one plugin per directory (dir name starts with dsh-), pub
   package.json         npm manifest + dsh.bundle declaration
   cordis.patch.yml     the layer applied when a profile installs this bundle
   src/index.ts         function plugin: name / inject / Config / apply
+  README.md            English doc
+  README.zh-CN.md      Chinese doc (mutually linked at the top)
   tests/               package-level vitest tests
 ```
 
@@ -20,14 +24,14 @@ A package becomes an installable **bundle** by declaring `"dsh": { "bundle": { "
 |---|---|---|
 | `@neplich/dsh-auto-fold` | Web GUI plugin: when the assistant starts outputting body text, auto-collapse the thinking and tool-call records above it behind one persistent expand/collapse bar (bilingual zh/en bar copy following dsh's UI language) | [README](packages/dsh-auto-fold/README.md) |
 | `@neplich/dsh-file-mention` | Web GUI plugin: `@` file mentions in the composer (cached local substring filter, icon-marked chips, multi-file references); mentioned files are inlined into the prompt as `<file path="...">...</file>` | [README](packages/dsh-file-mention/README.md) |
-| `@neplich/dsh-config-skills` | Web GUI plugin: a 技能 settings section — read-only browser of personal (`~/.dsh`/`~/.agents`) and project (`<root>/.dsh`/`<root>/.agents`) skills with source badges and shadowing (bilingual zh/en UI following dsh's language) | [README](packages/dsh-config-skills/README.md) |
-| `@neplich/dsh-config-instructions` | Web GUI plugin: an 指令文档 settings section — view and edit personal and project-root AGENTS.md / AGENTS.local.md files (atomic writes, live effect; bilingual zh/en UI following dsh's language) | [README](packages/dsh-config-instructions/README.md) |
-| `@neplich/dsh-config-mcp` | Web GUI plugin: an MCP 服务 settings section — live server status, add/edit/toggle/delete written to the user-level cordis.patch.yml with automatic HMR reload (bilingual zh/en UI following dsh's language) | [README](packages/dsh-config-mcp/README.md) |
-| `@neplich/dsh-preset-dev` | Agent preset installer: installs the 开发模式 (dev) preset — standard coding agent plus the cordis toolset — into the user preset root | [README](packages/dsh-preset-dev/README.md) |
+| `@neplich/dsh-config-skills` | Web GUI plugin: a Skills settings section — read-only browser of personal (`~/.dsh`/`~/.agents`) and project (`<root>/.dsh`/`<root>/.agents`) skills with source badges and shadowing (bilingual zh/en UI following dsh's language) | [README](packages/dsh-config-skills/README.md) |
+| `@neplich/dsh-config-instructions` | Web GUI plugin: an Instruction Documents settings section — view and edit personal and project-root AGENTS.md / AGENTS.local.md files (atomic writes, live effect; bilingual zh/en UI following dsh's language) | [README](packages/dsh-config-instructions/README.md) |
+| `@neplich/dsh-config-mcp` | Web GUI plugin: an MCP Servers settings section — live server status, add/edit/toggle/delete written to the user-level cordis.patch.yml with automatic HMR reload (bilingual zh/en UI following dsh's language) | [README](packages/dsh-config-mcp/README.md) |
+| `@neplich/dsh-preset-dev` | Agent preset installer: installs the Development Mode (dev) preset — standard coding agent plus the cordis toolset — into the user preset root | [README](packages/dsh-preset-dev/README.md) |
 
 The three config plugins share code through `packages/dsh-config-shared` (`@neplich/dsh-config-shared`), an internal library inlined at build time — not itself a plugin. Its shared scope-widget copy ships as dictionaries (`sharedScopeZh`/`sharedScopeEn`) that each consumer spreads into its own locale namespace.
 
-Every finished plugin ships a `README.md` in its package directory describing its function (features, config, install); the table above links to it. Keep the table in sync with `packages/`: any plugin addition, removal, or major update must update the plugin README and this table in the same change.
+Every finished plugin ships an English `README.md` and a matching Chinese `README.zh-CN.md` (mutually linked at the top) in its package directory describing its function (features, config, install); the table above links to the English one. Keep the table in sync with `packages/`: any plugin addition, removal, or major update must update the plugin READMEs and this table in the same change.
 
 ## Commands
 
@@ -40,10 +44,10 @@ pnpm run clean   # remove build outputs
 
 ## Add a plugin
 
-1. Create `packages/dsh-<name>/` (directory name must start with `dsh-` and match the package suffix) with `package.json` (`name: @neplich/dsh-<name>` plus the `dsh.bundle` declaration), `src/index.ts`, `tsconfig.json`, `tests/` and `README.md`.
+1. Create `packages/dsh-<name>/` (directory name must start with `dsh-` and match the package suffix) with `package.json` (`name: @neplich/dsh-<name>` plus the `dsh.bundle` declaration), `src/index.ts`, `tsconfig.json`, `tests/`, `README.md` and `README.zh-CN.md`.
 2. Update the plugin row in `cordis.patch.yml` (both `id` and `name`) and `name` in `src/index.ts`.
 3. Add `{ "path": "packages/dsh-<name>" }` to the root `tsconfig.json` references.
-4. Write `packages/dsh-<name>/README.md` describing the plugin's function, config, and install, and link it from the [Plugins](#plugins) table above.
+4. Write `packages/dsh-<name>/README.md` (English) and its Chinese counterpart `README.zh-CN.md` (mutually linked at the top) describing the plugin's function, config, and install, and link the English one from the [Plugins](#plugins) table above.
 5. `pnpm install && pnpm run build && pnpm run test`.
 
 > **Installability**: plugin source must install and build in any environment after cloning. Depend on harness packages with npm-registry semver ranges in `devDependencies` (matching `peerDependencies`), never `link:../../../deepseek-harness/...` sibling-checkout paths; use the pnpm `workspace:` protocol for in-repo dependencies. Re-run a full `pnpm install` (not just the existing `node_modules`) after any dependency change.

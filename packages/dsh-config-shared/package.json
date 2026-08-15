@@ -18,7 +18,8 @@
     "./package.json": "./package.json"
   },
   "files": [
-    "lib"
+    "lib",
+    "README.zh-CN.md"
   ],
   "publishConfig": {
     "access": "public"

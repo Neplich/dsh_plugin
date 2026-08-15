@@ -1,5 +1,7 @@
 # @neplich/dsh-file-mention
 
+[中文版](README.zh-CN.md) · English
+
 Web GUI plugin: typing `@` in the dsh composer opens the input-trigger menu with a **file** group listing the session workspace's files; picking one inserts a chip-style reference into the draft. A single prompt can mention several files. On send, each mention is serialized host-side: the file's text content is inlined into the prompt as `<file path="...">...</file>`, so the model receives the actual content, not just a path.
 
 Interaction details: the query filters by plain case-insensitive substring (basename prefix → basename containment → path containment, no fuzzy tier). Each menu row carries a `📄` icon, the file **basename** (with a ` (dir)` suffix when the page collides), and its directory in the description column. The composer's reference chip shows `📄 ` plus the basename, tail-elided against a canvas-measured width so the marker and the name's leading characters always survive the chip's fixed-width cell (its CSS would otherwise cut a random middle slice). After one per-session listing fetch, every keystroke filters the settled snapshot locally (the ui-skill cache pattern), so refinement never waits on the network; trees bigger than `maxListed` fall back to per-keystroke server-side ranking.
