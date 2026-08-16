@@ -29,7 +29,7 @@ Web GUI 插件：当 assistant 消息开始输出正文时，插件自动折叠�
 ## 安装
 
 ```sh
-dsh plugin --profile <name> add @neplich/dsh-auto-fold   # 或本地路径：./packages/dsh-auto-fold
+dsh plugin --profile <name> add @neplich/dsh-auto-fold   # 或本地路径：./packages/feature/dsh-auto-fold
 dsh web --profile <name>
 ```
 

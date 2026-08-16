@@ -32,7 +32,7 @@ Web GUI 插件：在 dsh 输入框中输入 `@` 会打开 input-trigger 菜单�
 ## 安装
 
 ```sh
-dsh plugin --profile <name> add @neplich/dsh-file-mention   # 或本地路径：./packages/dsh-file-mention
+dsh plugin --profile <name> add @neplich/dsh-file-mention   # 或本地路径：./packages/feature/dsh-file-mention
 dsh web --profile <name>
 ```
 

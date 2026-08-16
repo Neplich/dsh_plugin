@@ -29,7 +29,7 @@ None — no tunables; the plugin always collapses thinking + tool-call records a
 ## Install
 
 ```sh
-dsh plugin --profile <name> add @neplich/dsh-auto-fold   # or a local path: ./packages/dsh-auto-fold
+dsh plugin --profile <name> add @neplich/dsh-auto-fold   # or a local path: ./packages/feature/dsh-auto-fold
 dsh web --profile <name>
 ```
 

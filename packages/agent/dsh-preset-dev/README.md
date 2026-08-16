@@ -23,7 +23,7 @@ No config options. Environment variable:
 
 ```sh
 dsh plugin --profile <name> add @neplich/dsh-preset-dev   # after npm publish
-# or local dev: dsh plugin --profile <name> add ./packages/dsh-preset-dev
+# or local dev: dsh plugin --profile <name> add ./packages/agent/dsh-preset-dev
 ```
 
 After restarting dsh, the "Development Mode" preset appears in the picker.

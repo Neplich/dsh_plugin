@@ -23,7 +23,7 @@ dsh agent preset 安装插件：把「开发模式」（dev）agent preset —�
 
 ```sh
 dsh plugin --profile <name> add @neplich/dsh-preset-dev   # npm 发布后
-# 或本地开发：dsh plugin --profile <name> add ./packages/dsh-preset-dev
+# 或本地开发：dsh plugin --profile <name> add ./packages/agent/dsh-preset-dev
 ```
 
 重启 dsh 后，预设选择器中可见「开发模式」。

@@ -1,6 +1,6 @@
 {
-  "name": "@neplich/dsh-config-skills",
-  "description": "dsh Web GUI plugin: a Skills settings section — read-only browser of personal and project skills",
+  "name": "@neplich/dsh-config-mcp",
+  "description": "dsh Web GUI plugin: an MCP Servers settings section — list, add, edit, toggle, and delete MCP servers via the user-level cordis.patch.yml with live HMR reload",
   "version": "0.1.0",
   "license": "MIT",
   "type": "module",
@@ -46,16 +46,16 @@
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": "^4.0.1",
-    "@deepseek-ai/dsh-host-webserver": "^0.1.0-rc.5"
+    "@deepseek-ai/dsh-host-webserver": "^0.1.0-rc.6"
   },
   "devDependencies": {
     "@deepseek-ai/cordis": "^4.0.1",
-    "@deepseek-ai/dsh-host-webserver": "^0.1.0-rc.5",
-    "@deepseek-ai/dsh-client-locale": "^0.1.0-rc.5",
-    "@deepseek-ai/dsh-client-runtime": "^0.1.0-rc.5",
-    "@deepseek-ai/dsh-client-ui-settings": "^0.1.0-rc.5",
-    "@deepseek-ai/dsh-client-ui-slots": "^0.1.0-rc.5",
-    "@deepseek-ai/dsh-client-ui-primitives": "^0.1.0-rc.5",
+    "@deepseek-ai/dsh-host-webserver": "^0.1.0-rc.6",
+    "@deepseek-ai/dsh-client-locale": "^0.1.0-rc.6",
+    "@deepseek-ai/dsh-client-runtime": "^0.1.0-rc.6",
+    "@deepseek-ai/dsh-client-ui-settings": "^0.1.0-rc.6",
+    "@deepseek-ai/dsh-client-ui-slots": "^0.1.0-rc.6",
+    "@deepseek-ai/dsh-client-ui-primitives": "^0.1.0-rc.6",
     "@neplich/dsh-config-shared": "workspace:^",
     "@types/react": "~18.3.1",
     "@types/react-dom": "~18.3.0",

@@ -32,7 +32,7 @@ Requires a `dsh web` profile: the plugin declares `inject: ['agents', 'webServer
 ## Install
 
 ```sh
-dsh plugin --profile <name> add @neplich/dsh-file-mention   # or a local path: ./packages/dsh-file-mention
+dsh plugin --profile <name> add @neplich/dsh-file-mention   # or a local path: ./packages/feature/dsh-file-mention
 dsh web --profile <name>
 ```
 

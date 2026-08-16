@@ -1,6 +1,6 @@
 {
-  "name": "@neplich/dsh-file-mention",
-  "description": "dsh Web GUI plugin: '@' file mentions in the composer — pick workspace files into the chat context",
+  "name": "@neplich/dsh-auto-fold",
+  "description": "dsh Web GUI plugin: auto-collapse thinking and tool-call records above the assistant body text, with a persistent expand/collapse bar",
   "version": "0.1.0",
   "license": "MIT",
   "type": "module",
@@ -33,28 +33,21 @@
       "platform": "web",
       "inject": [
         "@deepseek-ai/dsh-client-runtime",
-        "@deepseek-ai/dsh-client-ui-input-trigger"
+        "@deepseek-ai/dsh-client-locale"
       ]
     }
   },
   "scripts": {
     "bundle": "tsdown"
   },
-  "dependencies": {
-    "@deepseek-ai/schemastery": "^3.18.1"
-  },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "^4.0.1",
-    "@deepseek-ai/dsh-agent": "^0.1.0-rc.6",
-    "@deepseek-ai/dsh-host-webserver": "^0.1.0-rc.5"
+    "@deepseek-ai/cordis": "^4.0.1"
   },
   "devDependencies": {
     "@deepseek-ai/cordis": "^4.0.1",
-    "@deepseek-ai/dsh-agent": "^0.1.0-rc.6",
-    "@deepseek-ai/dsh-session": "^0.1.0-rc.6",
-    "@deepseek-ai/dsh-host-webserver": "^0.1.0-rc.5",
-    "@deepseek-ai/dsh-client-runtime": "^0.1.0-rc.5",
-    "@deepseek-ai/dsh-client-ui-input-trigger": "^0.1.0-rc.5",
+    "@deepseek-ai/dsh-client-locale": "^0.1.0-rc.6",
+    "@deepseek-ai/dsh-client-runtime": "^0.1.0-rc.6",
+    "@deepseek-ai/dsh-client-ui-slots": "^0.1.0-rc.6",
     "tsdown": "^0.22.2"
   }
 }
