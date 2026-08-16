@@ -2,12 +2,13 @@
 
 [English](README.md) · 中文版
 
-dsh agent preset 安装插件：把「开发模式」（dev）agent preset —— 标准编码 Agent 的全部能力 + cordis 工具集（活体运行时检查与实验）—— 安装到用户预设根目录。
+dsh agent preset 安装插件：把「开发模式」（dev）agent preset —— 标准编码 Agent 的全部能力 + cordis 工具集（动态插件快速验证）—— 安装到用户预设根目录。预设内置「先动态验证、后沉淀」的开发策略：默认先用动态 Cordis 插件在进程内快速验证功能，修订并确认没问题后，再沉淀为 dsh 插件仓库内的正式包。
 
 ## 功能
 
 - 安装 `dev`（开发模式）agent preset：`agent.cordis.yml`（standard 全量 + 末尾 `tool-cordis` 行）、`preset.yml`（name: 开发模式，order: 5）
 - 随包携带 `editing-cordis-compositions` 技能（preset 的 `customSkillDirs` 指向包内 skills 目录的副本，`baseUrl` 相对 preset 所在目录解析）
+- **内置开发策略**（persona 提示）：默认先用动态 Cordis 插件快速验证（`cordis_define` / `cordis_run` / `cordis_inspect_*`），功能确认后再沉淀为目标插件仓库内的正式包（目标仓库与放置规则按所在仓库的维护文档）；动态插件用完即卸（`cordis_stop` / `cordis_undefine`）
 - **幂等安装**：目标已存在时不覆盖（保留本地编辑）；`DSH_PRESET_DEV_FORCE=1` 强制刷新为包内版本
 - 启动时自动安装；roster 每次重读磁盘，安装后立即可见（`trust: user`）
 
@@ -52,8 +53,9 @@ DSH_PRESET_DEV_FORCE=1 dsh --profile <name>   # 强制覆盖为包内版本
 ## 注意事项
 
 - dev preset 内含 `tool-cordis`（cordis 工具集），其 Inspect Provider 注册在进程级单例注册表上：**同一进程内不要同时挂载 cordis（创造模式）与 dev（开发模式）**。
+- 动态 Cordis 插件只存在于当前进程、不落盘：验证结束或沉淀完成后用 `cordis_stop` / `cordis_undefine` 显式卸载，不依赖进程退出兜底；卸载开发包后还需按目标环境的插件清理规范清理落盘产物（开发 preset 不进入生产部署）。
 - 插件本身在 host 平面运行，只负责落盘文件，不注册模型工具；模型可见影响全部来自被安装的 preset 本身。
 
 ## Model Experience
 
-本插件不注册模型工具、提示段或事件。安装后，dev 会话的工具列表中多出 `cordis_inspect_list` / `cordis_inspect_query` / `cordis_inspect_self` / `cordis_define` / `cordis_run` / `cordis_stop` / `cordis_undefine`，技能目录中多出 `editing-cordis-compositions`。
+本插件不注册模型工具、提示段或事件。安装后，dev 会话的工具列表中多出 `cordis_inspect_list` / `cordis_inspect_query` / `cordis_inspect_self` / `cordis_define` / `cordis_run` / `cordis_stop` / `cordis_undefine`，技能目录中多出 `editing-cordis-compositions`；persona 携带「先动态验证、后沉淀」开发策略：默认先用动态 Cordis 插件快速验证功能，修订并确认没问题后，再沉淀为 dsh 插件仓库内的正式包。

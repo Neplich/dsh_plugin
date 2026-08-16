@@ -27,7 +27,7 @@ packages/
 
 | 包 | 描述 | README |
 |---|---|---|
-| `@neplich/dsh-preset-dev` | Agent preset 安装器：把「开发模式」(dev) preset —— 标准编码 Agent 加 cordis 工具集 —— 安装到用户预设根目录 | [README](packages/agent/dsh-preset-dev/README.md) |
+| `@neplich/dsh-preset-dev` | Agent preset 安装器：把「开发模式」(dev) preset —— 标准编码 Agent 加 cordis 工具集 —— 安装到用户预设根目录；内置「先动态验证、后沉淀」开发策略（默认用动态 Cordis 插件快速验证，确认后再沉淀到插件仓库） | [README](packages/agent/dsh-preset-dev/README.md) |
 
 ### 功能插件
 
