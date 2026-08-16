@@ -8,7 +8,7 @@ dsh Web GUI plugin: adds a "Skills" section to the settings panel for read-only 
 
 - "Personal / Project" toggle: personal level = `~/.dsh/skills` + `~/.agents/skills`; project level = `<project root>/.dsh/skills` + `<project root>/.agents/skills` (project root = nearest ancestor directory containing `.git`)
 - The project page carries a project-root dropdown: options come from the registered workspaces, ordered by workspace (same as the sidebar)
-- Merged list showing name, description, source badge (personal/project .dsh or .agents), invocation mode (manual-only / not manual), and same-name shadowing relationships (lower-priority sources marked "shadowed")
+- Merged list showing name, description, source badge (personal/project .dsh or .agents), invocation mode (manual-only / not manual), and same-name shadowing relationships (lower-priority sources marked "shadowed"); symlinked skill directories and flat Markdown files are discovered like their direct counterparts
 - Clicking a row expands to show the full SKILL.md document
 - Read-only by design: skill content follows the filesystem; directory changes take effect automatically through dsh's own watcher
 

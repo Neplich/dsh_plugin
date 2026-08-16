@@ -74,13 +74,17 @@ async function scanSource(source: SkillSourceId, dir: string, maxFileBytes: numb
     const items: SkillItem[] = []
     for (const entry of entries) {
       if (entry.name.startsWith('.')) continue
+      const path = join(dir, entry.name)
+      const target = entry.isSymbolicLink()
+        ? await stat(path).catch(() => undefined)
+        : entry
       let file: string | undefined
-      if (entry.isDirectory()) {
-        const candidate = join(dir, entry.name, 'SKILL.md')
+      if (target?.isDirectory() === true) {
+        const candidate = join(path, 'SKILL.md')
         const info = await stat(candidate).catch(() => undefined)
         if (info?.isFile() === true) file = candidate
-      } else if (entry.isFile() && entry.name.endsWith('.md')) {
-        file = join(dir, entry.name)
+      } else if (target?.isFile() === true && entry.name.endsWith('.md')) {
+        file = path
       }
       if (file === undefined) continue
       const info = await stat(file)
