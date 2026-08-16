@@ -20,6 +20,9 @@
       "path": "packages/feature/dsh-config-mcp"
     },
     {
+      "path": "packages/feature/dsh-codex-chatgpt"
+    },
+    {
       "path": "packages/agent/dsh-preset-dev"
     }
   ]

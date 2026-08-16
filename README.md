@@ -33,6 +33,7 @@ A package becomes an installable **bundle** by declaring `"dsh": { "bundle": { "
 
 | Package | Description | README |
 |---|---|---|
+| `@neplich/dsh-codex-chatgpt` | LLM adapter: drive the ChatGPT Codex backend with your ChatGPT Plus/Pro subscription quota, reusing the Codex CLI login (`~/.codex/auth.json`) with automatic token refresh | [README](packages/feature/dsh-codex-chatgpt/README.md) |
 | `@neplich/dsh-auto-fold` | Web GUI plugin: when the assistant starts outputting body text, auto-collapse the thinking and tool-call records above it behind one persistent expand/collapse bar (bilingual zh/en bar copy following dsh's UI language) | [README](packages/feature/dsh-auto-fold/README.md) |
 | `@neplich/dsh-file-mention` | Web GUI plugin: `@` file mentions in the composer (cached local substring filter, icon-marked chips, multi-file references); mentioned files are inlined into the prompt as `<file path="...">...</file>` | [README](packages/feature/dsh-file-mention/README.md) |
 | `@neplich/dsh-config-skills` | Web GUI plugin: a Skills settings section — read-only browser of personal (`~/.dsh`/`~/.agents`) and project (`<root>/.dsh`/`<root>/.agents`) skills with source badges and shadowing (bilingual zh/en UI following dsh's language) | [README](packages/feature/dsh-config-skills/README.md) |

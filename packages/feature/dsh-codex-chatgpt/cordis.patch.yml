@@ -1,0 +1,3 @@
+- insert:
+    - id: codex-chatgpt
+      name: '@neplich/dsh-codex-chatgpt'
