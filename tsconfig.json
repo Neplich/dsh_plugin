@@ -8,6 +8,9 @@
       "path": "packages/feature/dsh-file-mention"
     },
     {
+      "path": "packages/feature/dsh-work-panel"
+    },
+    {
       "path": "packages/feature/dsh-config-shared"
     },
     {

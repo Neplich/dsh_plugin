@@ -35,6 +35,7 @@ packages/
 |---|---|---|
 | `@neplich/dsh-auto-fold` | Web GUI 插件：assistant 开始输出正文时，自动把正文之前的思考与工具调用记录折叠到一条常驻展开/收起条之后（条文案随 dsh 界面语言中英双语） | [README](packages/feature/dsh-auto-fold/README.md) |
 | `@neplich/dsh-file-mention` | Web GUI 插件：输入框中的 `@` 文件引用（本地缓存子串过滤、图标标记 chip、多文件引用）；被引用文件以内联 `<file path="...">...</file>` 形式进入提示词 | [README](packages/feature/dsh-file-mention/README.md) |
+| `@neplich/dsh-work-panel` | Web GUI 插件：右侧工作面板（Option/Alt+J），支持文件/终端混合标签、保留状态的文件浏览、交互式 PTY，以及按需加载的 PDF.js 与 OOXML Office 预览；界面随 dsh 语言中英双语 | [README](packages/feature/dsh-work-panel/README.md) |
 | `@neplich/dsh-config-skills` | Web GUI 插件：「技能」设置分区——个人（`~/.dsh`/`~/.agents`）与项目（`<root>/.dsh`/`<root>/.agents`）技能的只读浏览器，带来源徽章与同名覆盖关系（界面随 dsh 语言中英双语） | [README](packages/feature/dsh-config-skills/README.md) |
 | `@neplich/dsh-config-instructions` | Web GUI 插件：「指令文档」设置分区——查看与编辑个人及项目根的 AGENTS.md / AGENTS.local.md（原子写、即时生效；界面随 dsh 语言中英双语） | [README](packages/feature/dsh-config-instructions/README.md) |
 | `@neplich/dsh-config-mcp` | Web GUI 插件：「MCP 服务」设置分区——实时服务器状态、增删改查写入用户级 cordis.patch.yml 并自动 HMR 热重载（界面随 dsh 语言中英双语） | [README](packages/feature/dsh-config-mcp/README.md) |
