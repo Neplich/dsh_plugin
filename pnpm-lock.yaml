@@ -85,10 +85,10 @@ importers:
         specifier: ^1.30.0
         version: 1.33.0
       react:
-        specifier: ^18.2.0
+        specifier: ^18.3.1
         version: 18.3.1
       react-dom:
-        specifier: ^18.2.0
+        specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       tsdown:
         specifier: ^0.22.2
@@ -134,10 +134,10 @@ importers:
         specifier: ^1.30.0
         version: 1.33.0
       react:
-        specifier: ^18.2.0
+        specifier: ^18.3.1
         version: 18.3.1
       react-dom:
-        specifier: ^18.2.0
+        specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       tsdown:
         specifier: ^0.22.2
@@ -164,7 +164,7 @@ importers:
         specifier: ~18.3.0
         version: 18.3.7(@types/react@18.3.31)
       react:
-        specifier: ^18.2.0
+        specifier: ^18.3.1
         version: 18.3.1
 
   packages/feature/dsh-config-skills:
@@ -207,10 +207,10 @@ importers:
         specifier: ^1.30.0
         version: 1.33.0
       react:
-        specifier: ^18.2.0
+        specifier: ^18.3.1
         version: 18.3.1
       react-dom:
-        specifier: ^18.2.0
+        specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       tsdown:
         specifier: ^0.22.2
@@ -253,8 +253,8 @@ importers:
         specifier: ^3.18.1
         version: 3.18.1
       '@silurus/ooxml':
-        specifier: 0.78.1
-        version: 0.78.1
+        specifier: 0.79.1
+        version: 0.79.1
       '@xterm/addon-fit':
         specifier: ^0.10.0
         version: 0.10.0(@xterm/xterm@5.5.0)
@@ -1203,8 +1203,8 @@ packages:
   '@shikijs/vscode-textmate@10.0.2':
     resolution: {integrity: sha512-83yeghZ2xxin3Nj8z1NMd/NCuca+gsYXswywDy5bHvwlWL8tpTQmzGeUuHd9FC3E/SBEMvzJRwWEOz5gGes9Qg==}
 
-  '@silurus/ooxml@0.78.1':
-    resolution: {integrity: sha512-JX45ua75muM1jrT3nbsrEArwfYE9Fe5uVF3lez7ZAqXkLteS3vaCyznrW692mLA0RfrjTFsr3FWwifcfN5WZKA==}
+  '@silurus/ooxml@0.79.1':
+    resolution: {integrity: sha512-Ds0hwPdr2gLpB7XCJ4o6jx5Bq7ih+l/mN+CFGdcIRoRlcDCDjgUzI8jh5eluTAs0teZezVUra+Iw1T6fT3Tt4w==}
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
@@ -3152,7 +3152,7 @@ snapshots:
 
   '@shikijs/vscode-textmate@10.0.2': {}
 
-  '@silurus/ooxml@0.78.1': {}
+  '@silurus/ooxml@0.79.1': {}
 
   '@standard-schema/spec@1.1.0': {}
 

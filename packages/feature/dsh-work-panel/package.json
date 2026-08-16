@@ -44,7 +44,7 @@
   },
   "dependencies": {
     "@deepseek-ai/schemastery": "^3.18.1",
-    "@silurus/ooxml": "0.78.1",
+    "@silurus/ooxml": "0.79.1",
     "@xterm/addon-fit": "^0.10.0",
     "@xterm/xterm": "^5.5.0",
     "pdfjs-dist": "^6.2.108",
