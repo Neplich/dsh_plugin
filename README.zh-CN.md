@@ -33,7 +33,6 @@ packages/
 
 | 包 | 描述 | README |
 |---|---|---|
-| `@neplich/dsh-codex-chatgpt` | LLM 适配器：用 ChatGPT Plus/Pro 订阅的 Codex 额度驱动 ChatGPT Codex 后端，复用 Codex CLI 登录（`~/.codex/auth.json`）并自动刷新 token | [README](packages/feature/dsh-codex-chatgpt/README.md) |
 | `@neplich/dsh-auto-fold` | Web GUI 插件：assistant 开始输出正文时，自动把正文之前的思考与工具调用记录折叠到一条常驻展开/收起条之后（条文案随 dsh 界面语言中英双语） | [README](packages/feature/dsh-auto-fold/README.md) |
 | `@neplich/dsh-file-mention` | Web GUI 插件：输入框中的 `@` 文件引用（本地缓存子串过滤、图标标记 chip、多文件引用）；被引用文件以内联 `<file path="...">...</file>` 形式进入提示词 | [README](packages/feature/dsh-file-mention/README.md) |
 | `@neplich/dsh-config-skills` | Web GUI 插件：「技能」设置分区——个人（`~/.dsh`/`~/.agents`）与项目（`<root>/.dsh`/`<root>/.agents`）技能的只读浏览器，带来源徽章与同名覆盖关系（界面随 dsh 语言中英双语） | [README](packages/feature/dsh-config-skills/README.md) |
