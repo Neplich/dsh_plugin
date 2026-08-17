@@ -5,6 +5,9 @@
       "path": "packages/feature/dsh-auto-fold"
     },
     {
+      "path": "packages/feature/dsh-mermaid"
+    },
+    {
       "path": "packages/feature/dsh-file-mention"
     },
     {
