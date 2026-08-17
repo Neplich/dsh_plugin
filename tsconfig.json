@@ -26,6 +26,9 @@
       "path": "packages/feature/dsh-config-mcp"
     },
     {
+      "path": "packages/feature/dsh-annotations"
+    },
+    {
       "path": "packages/agent/dsh-preset-dev"
     }
   ]

@@ -40,6 +40,7 @@ packages/
 | `@neplich/dsh-config-skills` | Web GUI 插件：「技能」设置分区——个人（`~/.dsh`/`~/.agents`）与项目（`<root>/.dsh`/`<root>/.agents`）技能的只读浏览器，带来源徽章与同名覆盖关系（界面随 dsh 语言中英双语） | [README](packages/feature/dsh-config-skills/README.md) |
 | `@neplich/dsh-config-instructions` | Web GUI 插件：「指令文档」设置分区——查看与编辑个人及项目根的 AGENTS.md / AGENTS.local.md（原子写、即时生效；界面随 dsh 语言中英双语） | [README](packages/feature/dsh-config-instructions/README.md) |
 | `@neplich/dsh-config-mcp` | Web GUI 插件：「MCP 服务」设置分区——实时服务器状态、增删改查写入用户级 cordis.patch.yml 并自动 HMR 热重载（界面随 dsh 语言中英双语） | [README](packages/feature/dsh-config-mcp/README.md) |
+| `@neplich/dsh-annotations` | Web GUI 插件：在历史助手回复中框选文字并作为待发送注释附加到输入框，随下一条消息一起发送（消息持续高亮、计数胶囊、详情浮层；界面随 dsh 语言中英双语） | [README](packages/feature/dsh-annotations/README.md) |
 
 三个 config 插件通过 `packages/feature/dsh-config-shared`（`@neplich/dsh-config-shared`）共享代码，这是一个构建时内联的内部库——本身不是插件。其共享的 scope 组件文案以字典形式发布（`sharedScopeZh`/`sharedScopeEn`），各消费插件 spread 进自己的 locale namespace。
 
