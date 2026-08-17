@@ -1,6 +1,6 @@
 /**
  * Shared HTTP helpers for the config-center routes: JSON responses, the
- * loopback origin fence (same policy as dsh-file-mention), and bounded JSON
+ * loopback origin fence (same policy as dsh-chat-filemention), and bounded JSON
  * body parsing.
  */
 import type { IncomingMessage, ServerResponse } from 'node:http'

@@ -1,0 +1,4 @@
+# The dsh-chat-autofold bundle patch: one row inserted into the profile.
+- insert:
+    - id: chat-autofold
+      name: '@neplich/dsh-chat-autofold'

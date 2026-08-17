@@ -1,0 +1,3 @@
+- insert:
+    - id: chat-filemention
+      name: '@neplich/dsh-chat-filemention'

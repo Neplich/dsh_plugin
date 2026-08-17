@@ -1,0 +1,3 @@
+- insert:
+    - id: agent-presetdev
+      name: '@neplich/dsh-agent-presetdev'

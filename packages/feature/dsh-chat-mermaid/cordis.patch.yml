@@ -1,0 +1,3 @@
+- insert:
+    - id: chat-mermaid
+      name: '@neplich/dsh-chat-mermaid'

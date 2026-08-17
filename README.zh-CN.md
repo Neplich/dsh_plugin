@@ -27,20 +27,20 @@ packages/
 
 | 包 | 描述 | README |
 |---|---|---|
-| `@neplich/dsh-preset-dev` | Agent preset 安装器：把「开发模式」(dev) preset —— 标准编码 Agent 加 cordis 工具集 —— 安装到用户预设根目录；内置「先动态验证、后沉淀」开发策略（默认用动态 Cordis 插件快速验证，确认后再沉淀到插件仓库） | [README](packages/agent/dsh-preset-dev/README.md) |
+| `@neplich/dsh-agent-presetdev` | Agent preset 安装器：把「开发模式」(dev) preset —— 标准编码 Agent 加 cordis 工具集 —— 安装到用户预设根目录；内置「先动态验证、后沉淀」开发策略（默认用动态 Cordis 插件快速验证，确认后再沉淀到插件仓库） | [README](packages/agent/dsh-agent-presetdev/README.md) |
 
 ### 功能插件
 
 | 包 | 描述 | README |
 |---|---|---|
-| `@neplich/dsh-auto-fold` | Web GUI 插件：assistant 开始输出正文时，自动把正文之前的思考与工具调用记录折叠到一条常驻展开/收起条之后（条文案随 dsh 界面语言中英双语） | [README](packages/feature/dsh-auto-fold/README.md) |
-| `@neplich/dsh-file-mention` | Web GUI 插件：输入框中的 `@` 文件引用（本地缓存子串过滤、图标标记 chip、多文件引用）；被引用文件以内联 `<file path="...">...</file>` 形式进入提示词 | [README](packages/feature/dsh-file-mention/README.md) |
-| `@neplich/dsh-work-panel` | Web GUI 插件：右侧工作面板（Option/Alt+J），支持文件/终端混合标签、保留状态的文件浏览、交互式 PTY，以及按需加载的 PDF.js 与 OOXML Office 预览；界面随 dsh 语言中英双语 | [README](packages/feature/dsh-work-panel/README.md) |
-| `@neplich/dsh-mermaid` | Web GUI 插件：把 mermaid 代码块渲染为 SVG 图表卡片（可切换源码），并提供全屏缩放查看器（滚轮缩放/拖拽平移）；图表跟随明暗主题，界面随 dsh 语言中英双语，引擎经回环路由提供、不依赖 CDN | [README](packages/feature/dsh-mermaid/README.md) |
+| `@neplich/dsh-chat-autofold` | Web GUI 插件：assistant 开始输出正文时，自动把正文之前的思考与工具调用记录折叠到一条常驻展开/收起条之后（条文案随 dsh 界面语言中英双语） | [README](packages/feature/dsh-chat-autofold/README.md) |
+| `@neplich/dsh-chat-filemention` | Web GUI 插件：输入框中的 `@` 文件引用（本地缓存子串过滤、图标标记 chip、多文件引用）；被引用文件以内联 `<file path="...">...</file>` 形式进入提示词 | [README](packages/feature/dsh-chat-filemention/README.md) |
+| `@neplich/dsh-web-workpanel` | Web GUI 插件：右侧工作面板（Option/Alt+J），支持文件/终端混合标签、保留状态的文件浏览、交互式 PTY，以及按需加载的 PDF.js 与 OOXML Office 预览；界面随 dsh 语言中英双语 | [README](packages/feature/dsh-web-workpanel/README.md) |
+| `@neplich/dsh-chat-mermaid` | Web GUI 插件：把 mermaid 代码块渲染为 SVG 图表卡片（可切换源码），并提供全屏缩放查看器（滚轮缩放/拖拽平移）；图表跟随明暗主题，界面随 dsh 语言中英双语，引擎经回环路由提供、不依赖 CDN | [README](packages/feature/dsh-chat-mermaid/README.md) |
 | `@neplich/dsh-config-skills` | Web GUI 插件：「技能」设置分区——个人（`~/.dsh`/`~/.agents`）与项目（`<root>/.dsh`/`<root>/.agents`）技能的只读浏览器，带来源徽章与同名覆盖关系（界面随 dsh 语言中英双语） | [README](packages/feature/dsh-config-skills/README.md) |
 | `@neplich/dsh-config-instructions` | Web GUI 插件：「指令文档」设置分区——查看与编辑个人及项目根的 AGENTS.md / AGENTS.local.md（原子写、即时生效；界面随 dsh 语言中英双语） | [README](packages/feature/dsh-config-instructions/README.md) |
 | `@neplich/dsh-config-mcp` | Web GUI 插件：「MCP 服务」设置分区——实时服务器状态、增删改查写入用户级 cordis.patch.yml 并自动 HMR 热重载（界面随 dsh 语言中英双语） | [README](packages/feature/dsh-config-mcp/README.md) |
-| `@neplich/dsh-annotations` | Web GUI 插件：在历史助手回复中框选文字并作为待发送注释附加到输入框，随下一条消息一起发送（消息持续高亮、计数胶囊、详情浮层；界面随 dsh 语言中英双语） | [README](packages/feature/dsh-annotations/README.md) |
+| `@neplich/dsh-chat-annotations` | Web GUI 插件：在历史助手回复中框选文字并作为待发送注释附加到输入框，随下一条消息一起发送（消息持续高亮、计数胶囊、详情浮层；界面随 dsh 语言中英双语） | [README](packages/feature/dsh-chat-annotations/README.md) |
 
 三个 config 插件通过 `packages/feature/dsh-config-shared`（`@neplich/dsh-config-shared`）共享代码，这是一个构建时内联的内部库——本身不是插件。其共享的 scope 组件文案以字典形式发布（`sharedScopeZh`/`sharedScopeEn`），各消费插件 spread 进自己的 locale namespace。
 

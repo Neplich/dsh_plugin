@@ -2,16 +2,16 @@
   "files": [],
   "references": [
     {
-      "path": "packages/feature/dsh-auto-fold"
+      "path": "packages/feature/dsh-chat-autofold"
     },
     {
-      "path": "packages/feature/dsh-mermaid"
+      "path": "packages/feature/dsh-chat-mermaid"
     },
     {
-      "path": "packages/feature/dsh-file-mention"
+      "path": "packages/feature/dsh-chat-filemention"
     },
     {
-      "path": "packages/feature/dsh-work-panel"
+      "path": "packages/feature/dsh-web-workpanel"
     },
     {
       "path": "packages/feature/dsh-config-shared"
@@ -26,10 +26,10 @@
       "path": "packages/feature/dsh-config-mcp"
     },
     {
-      "path": "packages/feature/dsh-annotations"
+      "path": "packages/feature/dsh-chat-annotations"
     },
     {
-      "path": "packages/agent/dsh-preset-dev"
+      "path": "packages/agent/dsh-agent-presetdev"
     }
   ]
 }

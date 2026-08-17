@@ -1,0 +1,4 @@
+# The dsh-chat-annotations bundle patch: one row inserted into the profile.
+- insert:
+    - id: chat-annotations
+      name: '@neplich/dsh-chat-annotations'
