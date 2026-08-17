@@ -9,7 +9,7 @@ Web GUI plugin: a right-side **work panel** for the dsh browser GUI, modeled on 
 
 The tab strip belongs to the whole work panel, not to either tool. File and terminal tabs can be mixed, selected with the mouse or arrow keys, and closed independently. It occupies the panel's single top bar alongside the new-tab and panel controls, without a redundant tool-title row. The `+` button opens the two-item chooser without removing existing tabs. Switching tabs, closing and reopening the panel, or switching sessions preserves every file view and terminal process; a reattached terminal view replays its retained buffer.
 
-The panel occupies the shell's dedicated right workbench column, so opening it narrows the conversation instead of covering it. Switching tools does not change the column width. Width drags from the left edge (or arrow keys on the focused handle), with an expand/restore button in the panel header. Below the shell's own auto-collapse breakpoint the panel closes itself instead of squeezing the conversation. The panel and the shell's tool-details column share the right edge by mutual exclusion: opening one closes the other, so the shipped tool details stay fully accessible.
+The panel is right-docked in the shell's frame-wide overlay, so it works with a stock dsh installation without patching the shell. Opening it covers the conversation's right edge rather than changing the shell columns; switching tools does not change its width. Width drags from the left edge (or arrow keys on the focused handle), with an expand/restore button in the panel header. Below the auto-collapse breakpoint the panel closes itself to keep the conversation usable. The panel and the shell's tool-details column share the right edge by mutual exclusion: opening one closes the other, so the shipped tool details stay fully accessible.
 
 All copy follows the dsh interface language (中文/English), all colors come from the `--dsw-*` theme tokens (dark and light both supported), transitions stay within 150–300ms and honor `prefers-reduced-motion`, and every icon button carries a tooltip, an `aria-label`, and a visible focus ring.
 
@@ -31,7 +31,7 @@ The session's cwd resolves from its live Agent first, then the in-memory session
 
 The terminal pool keys PTYs by GUI session and terminal-tab id (`ctx.subprocess.spawnTerminal`). Sockets attach and detach freely; each PTY has a ring buffer (`terminalScrollbackBytes`) for replay. Closing a tab terminates only its PTY; disposing a session terminates all of that session's PTYs; plugin unload terminates the complete pool.
 
-The client half registers into two slots: the panel surface into `shell.workbench` and the toggle button into `conversation.session.header.utilities`, after Session log. Panel state (open flag, width, per-session mixed tab strip, and per-file-tab browser state) lives in one root-scoped slot store.
+The client half registers into two slots: the panel surface into `shell.overlay` and the toggle button into `conversation.session.header.utilities`, after Session log. Panel state (open flag, width, per-session mixed tab strip, and per-file-tab browser state) lives in one root-scoped slot store.
 
 ## Config
 
@@ -76,4 +76,4 @@ None: no tools, no prompt sections, no session events. The panel is human-facing
 - **Tab metadata is browser-memory state.** Tab switches, panel close/reopen, and session switches preserve mixed file/terminal tabs and PTYs. A full browser-page reload recreates the visible tab strip; host PTYs are still cleaned up when the dsh session closes or the plugin unloads.
 - **PDF editing is not persisted.** PDF.js renders annotations and interactive forms, but the work panel does not write modified PDFs back to the workspace. The download action returns the original file.
 - **Office preview is read-only and best-effort.** `.docx`, `.xlsx`, and `.pptx` are rendered locally without LibreOffice or a cloud service. Complex macros, embedded objects, uncommon fonts, and advanced layout features can differ from Microsoft Office. Legacy binary `.doc`, `.xls`, and `.ppt` files are not supported.
-- **Workbench slot requirement.** The panel requires a dsh shell that exposes the `shell.workbench` slot. Older builds only expose a floating overlay and cannot provide a true fourth layout column to an external plugin.
+- **Overlay placement.** Stock dsh exposes `shell.overlay` for additive frame-wide surfaces but no independent right layout column. The panel therefore floats above the conversation's right edge instead of shrinking it.

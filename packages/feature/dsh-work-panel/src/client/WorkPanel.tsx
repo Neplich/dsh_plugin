@@ -1,6 +1,6 @@
 /**
- * The work panel root: a right-docked surface inside the shell workbench
- * column. It owns the panel controls, drag-resize handle, narrow-viewport
+ * The work panel root: a right-docked surface inside the shell overlay.
+ * It owns the panel controls, drag-resize handle, narrow-viewport
  * auto-collapse, and the mutual exclusion with
  * the shell's tool-details column — opening this panel closes the details
  * column through ctx.layout, and a later details opening (a tool-call click
@@ -28,7 +28,7 @@ export interface WorkPanelInjected {
 
 /** Full props composed from the four shares. */
 export type WorkPanelProps =
-  & PropsRuntime<'shell.workbench'>
+  & PropsRuntime<'shell.overlay'>
   & PropsStore<ReturnType<typeof createWorkPanelStore>>
   & WorkPanelInjected
   & PropsLocale<'workPanel'>
@@ -113,7 +113,7 @@ export function WorkPanel(props: WorkPanelProps): ReactElement | null {
   }, [open, closeDetails])
   useEffect(() => {
     if (!open) return
-    const frame = rootRef.current?.closest('[data-shell-frame]')
+    const frame = rootRef.current?.closest('[data-shell-overlay]')?.parentElement
     if (frame == null) return
     const observer = new MutationObserver(() => {
       if (!frame.hasAttribute('data-details-collapsed')) actions.closePanel()

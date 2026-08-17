@@ -1,6 +1,6 @@
 /**
  * Right-side work panel, browser half: registers the panel surface into the
- * shell's right workbench column, the open/close toggle into the session
+ * shell's frame-wide overlay, the open/close toggle into the session
  * header's right utility row, the bilingual dictionaries, the panel stylesheet, and the
  * global Option+J / Alt+J toggle. The panel itself (WorkPanel) owns the mutual
  * exclusion with the shell's tool-details column; terminal process state
@@ -11,7 +11,7 @@
 import type { ClientContext } from '@deepseek-ai/dsh-client-runtime/client'
 // Type-only: ctx.locale merge.
 import type {} from '@deepseek-ai/dsh-client-locale/client'
-// Type-only: ctx.layout merge plus the 'shell.workbench' SlotMap entry.
+// Type-only: ctx.layout merge plus the 'shell.overlay' SlotMap entry.
 import type {} from '@deepseek-ai/dsh-client-ui-layout/client'
 // Type-only: the 'conversation.session.header.utilities' SlotMap entry.
 import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
@@ -26,10 +26,6 @@ import { en, zh } from './locales.ts'
 import type { WorkPanelKey } from './locales.ts'
 
 declare module '@deepseek-ai/dsh-client-ui-slots' {
-  interface SlotMap {
-    /** Added by current dsh ui-layout; repeated here for older published type packages. */
-    'shell.workbench': { kind: 'single'; scope: 'root' }
-  }
   interface LocaleNamespaceMap {
     /** The work panel's copy. */
     workPanel: WorkPanelKey
@@ -79,12 +75,14 @@ export function apply(ctx: ClientContext): void {
   }, 'work-panel: styles')
 
   const panelStore = createWorkPanelStore()
-  // Bound actions arrive with the workbench entry's mount; the header button
+  // Bound actions arrive with the overlay entry's mount; the header button
   // and the keydown binding read them lazily at gesture time.
   let panelActions: { togglePanel: () => void } | undefined
 
-  ctx.slots.inject('shell.workbench', () => ctx.slots.register({
-    name: 'shell.workbench',
+  ctx.slots.inject('shell.overlay', () => ctx.slots.register({
+    name: 'shell.overlay',
+    id: 'work-panel',
+    order: 100,
     locale: NS,
     store: panelStore,
     inject: (actions: { togglePanel: () => void }) => {
