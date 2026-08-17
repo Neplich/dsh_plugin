@@ -10,7 +10,7 @@
 packages/
   agent/                 agent 策略与预设插件
   feature/               功能插件：模型适配器、Web GUI 设置分区、输入框与界面功能
-  <group>/dsh-<name>/    每个目录一个插件（目录名以 dsh- 开头），发布为 @neplich/dsh-<name>
+  <group>/dsh-<name>/    每个目录一个插件，命名 dsh-<作用区间>-<插件名>（如 dsh-chat-filemention；作用区间：agent | chat | config | web，插件名无连字符），发布为 @neplich/dsh-<name>
     package.json         npm manifest + dsh.bundle 声明
     cordis.patch.yml     profile 安装该 bundle 时应用的层
     src/index.ts         function plugin：name / inject / Config / apply
@@ -57,7 +57,7 @@ pnpm run clean   # 清理构建产物
 
 ## 新增插件
 
-1. 创建 `packages/<group>/dsh-<name>/`（目录名必须以 `dsh-` 开头且与包后缀一致；agent 策略与预设插件放 `agent/`，LLM 适配器、Web GUI 与其他功能插件放 `feature/`），包含 `package.json`（`name: @neplich/dsh-<name>` 加 `dsh.bundle` 声明）、`src/index.ts`、`tsconfig.json`、`tests/`、`README.md` 与 `README.zh-CN.md`。
+1. 创建 `packages/<group>/dsh-<name>/`（插件统一命名为 `dsh-<作用区间>-<插件名>`——作用区间取 `agent`/`chat`/`config`/`web`，插件名为无连字符的一段，如 `dsh-chat-filemention`；目录名必须与包后缀一致；agent 策略与预设插件放 `agent/`，LLM 适配器、Web GUI 与其他功能插件放 `feature/`），包含 `package.json`（`name: @neplich/dsh-<name>` 加 `dsh.bundle` 声明）、`src/index.ts`、`tsconfig.json`、`tests/`、`README.md` 与 `README.zh-CN.md`。
 2. 更新 `cordis.patch.yml` 中的插件行（`id` 与 `name`）以及 `src/index.ts` 中的 `name`。
 3. 在根 `tsconfig.json` 的 references 中添加 `{ "path": "packages/<group>/dsh-<name>" }`。
 4. 编写 `packages/<group>/dsh-<name>/README.md`（英文）与中文版 `README.zh-CN.md`（顶部互链），描述插件功能、配置与安装，并在上方 [插件清单](#插件清单) 中链接英文版。

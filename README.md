@@ -10,7 +10,7 @@ A collection of [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harne
 packages/
   agent/                 agent strategy and preset plugins
   feature/               feature plugins: model adapters, Web GUI settings sections, composer and UI features
-  <group>/dsh-<name>/    one plugin per directory (dir name starts with dsh-), published as @neplich/dsh-<name>
+  <group>/dsh-<name>/    one plugin per directory, named dsh-<scope>-<name> (e.g. dsh-chat-filemention; scope: agent | chat | config | web, hyphen-free name), published as @neplich/dsh-<name>
     package.json         npm manifest + dsh.bundle declaration
     cordis.patch.yml     the layer applied when a profile installs this bundle
     src/index.ts         function plugin: name / inject / Config / apply
@@ -57,7 +57,7 @@ pnpm run clean   # remove build outputs
 
 ## Add a plugin
 
-1. Create `packages/<group>/dsh-<name>/` (directory name must start with `dsh-` and match the package suffix; choose `agent/` for agent strategy and preset plugins, `feature/` for LLM adapters, Web GUI, and other feature plugins) with `package.json` (`name: @neplich/dsh-<name>` plus the `dsh.bundle` declaration), `src/index.ts`, `tsconfig.json`, `tests/`, `README.md` and `README.zh-CN.md`.
+1. Create `packages/<group>/dsh-<name>/` (name every plugin `dsh-<scope>-<name>` — scope from `agent`/`chat`/`config`/`web`, hyphen-free name, e.g. `dsh-chat-filemention`; the directory name must match the package suffix; choose `agent/` for agent strategy and preset plugins, `feature/` for LLM adapters, Web GUI, and other feature plugins) with `package.json` (`name: @neplich/dsh-<name>` plus the `dsh.bundle` declaration), `src/index.ts`, `tsconfig.json`, `tests/`, `README.md` and `README.zh-CN.md`.
 2. Update the plugin row in `cordis.patch.yml` (both `id` and `name`) and `name` in `src/index.ts`.
 3. Add `{ "path": "packages/<group>/dsh-<name>" }` to the root `tsconfig.json` references.
 4. Write `packages/<group>/dsh-<name>/README.md` (English) and its Chinese counterpart `README.zh-CN.md` (mutually linked at the top) describing the plugin's function, config, and install, and link the English one from the [Plugins](#plugins) table above.
