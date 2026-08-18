@@ -8,7 +8,7 @@
 
 ```
 packages/
-  agent/                 agent 策略与预设插件
+  agent/                 agent 策略、工具与预设插件
   feature/               功能插件：模型适配器、Web GUI 设置分区、输入框与界面功能
   <group>/dsh-<name>/    每个目录一个插件，命名 dsh-<作用区间>-<插件名>（如 dsh-chat-filemention；作用区间：agent | chat | config | web，插件名无连字符），发布为 @neplich/dsh-<name>
     package.json         npm manifest + dsh.bundle 声明
@@ -28,6 +28,8 @@ packages/
 | 包 | 描述 | README |
 |---|---|---|
 | `@neplich/dsh-agent-presetdev` | Agent preset 安装器：把「开发模式」(dev) preset —— 标准编码 Agent 加 Code Mode 呈现与 cordis 工具集 —— 安装到用户预设根目录；内置「先动态验证、后沉淀」开发策略（默认用动态 Cordis 插件快速验证，确认后再沉淀到插件仓库） | [README](packages/agent/dsh-agent-presetdev/README.md) |
+| `@neplich/dsh-agent-webuse` | Agent 工具插件：浏览器操作（computer-use 风格）工具——Playwright 驱动的自动化 Chrome，支持导航/快照/点击/输入/标签页/脚本/截图，默认有头可观看，截图在无图片能力部署上优雅降级 | [README](packages/agent/dsh-agent-webuse/README.md) |
+| `@neplich/dsh-agent-imagevault` | Agent 工具插件：把工具结果里的所有图片归档为普通文件，并经回环 HTTP 直读附件库提供稳定图片 URL，用于聊天流展示 | [README](packages/agent/dsh-agent-imagevault/README.md) |
 
 ### 功能插件
 
@@ -43,8 +45,6 @@ packages/
 | `@neplich/dsh-chat-annotations` | Web GUI 插件：在历史助手回复中框选文字并作为待发送注释附加到输入框，随下一条消息一起发送（消息持续高亮、计数胶囊、详情浮层；界面随 dsh 语言中英双语） | [README](packages/feature/dsh-chat-annotations/README.md) |
 | `@neplich/dsh-chat-autoload` | Web GUI 插件：自动把当前会话的完整历史分页拉取到客户端，并提供 `chatAutoload` 服务供其他插件（如 dsh-chat-navigator）依赖 | [README](packages/feature/dsh-chat-autoload/README.md) |
 | `@neplich/dsh-chat-navigator` | Web GUI 插件：聊天区左边缘的窄型对话轨道——每轮用户请求一条标记，悬停预览卡、点击跳转、滚动联动高亮（依赖 dsh-chat-autoload） | [README](packages/feature/dsh-chat-navigator/README.md) |
-| `@neplich/dsh-agent-webuse` | Agent 插件：浏览器操作（computer-use 风格）工具——Playwright 驱动的自动化 Chrome，支持导航/快照/点击/输入/标签页/脚本/截图，默认有头可观看，截图在无图片能力部署上优雅降级 | [README](packages/feature/dsh-agent-webuse/README.md) |
-| `@neplich/dsh-agent-imagevault` | Agent 插件：把工具结果里的所有图片归档为普通文件，并经回环 HTTP 直读附件库提供稳定图片 URL，用于聊天流展示 | [README](packages/feature/dsh-agent-imagevault/README.md) |
 
 三个 config 插件通过 `packages/feature/dsh-config-shared`（`@neplich/dsh-config-shared`）共享代码，这是一个构建时内联的内部库——本身不是插件。其共享的 scope 组件文案以字典形式发布（`sharedScopeZh`/`sharedScopeEn`），各消费插件 spread 进自己的 locale namespace。
 
@@ -61,7 +61,7 @@ pnpm run clean   # 清理构建产物
 
 ## 新增插件
 
-1. 创建 `packages/<group>/dsh-<name>/`（插件统一命名为 `dsh-<作用区间>-<插件名>`——作用区间取 `agent`/`chat`/`config`/`web`，插件名为无连字符的一段，如 `dsh-chat-filemention`；目录名必须与包后缀一致；agent 策略与预设插件放 `agent/`，LLM 适配器、Web GUI 与其他功能插件放 `feature/`），包含 `package.json`（`name: @neplich/dsh-<name>` 加 `dsh.bundle` 声明）、`src/index.ts`、`tsconfig.json`、`tests/`、`README.md` 与 `README.zh-CN.md`。
+1. 创建 `packages/<group>/dsh-<name>/`（插件统一命名为 `dsh-<作用区间>-<插件名>`——作用区间取 `agent`/`chat`/`config`/`web`，插件名为无连字符的一段，如 `dsh-chat-filemention`；目录名必须与包后缀一致；agent 策略、工具与预设插件放 `agent/`，LLM 适配器、Web GUI 与其他功能插件放 `feature/`），包含 `package.json`（`name: @neplich/dsh-<name>` 加 `dsh.bundle` 声明）、`src/index.ts`、`tsconfig.json`、`tests/`、`README.md` 与 `README.zh-CN.md`。
 2. 更新 `cordis.patch.yml` 中的插件行（`id` 与 `name`）以及 `src/index.ts` 中的 `name`。
 3. 在根 `tsconfig.json` 的 references 中添加 `{ "path": "packages/<group>/dsh-<name>" }`。
 4. 编写 `packages/<group>/dsh-<name>/README.md`（英文）与中文版 `README.zh-CN.md`（顶部互链），描述插件功能、配置与安装，并在上方 [插件清单](#插件清单) 中链接英文版。

@@ -38,10 +38,10 @@
       "path": "packages/agent/dsh-agent-presetdev"
     },
     {
-      "path": "packages/feature/dsh-agent-webuse"
+      "path": "packages/agent/dsh-agent-webuse"
     },
     {
-      "path": "packages/feature/dsh-agent-imagevault"
+      "path": "packages/agent/dsh-agent-imagevault"
     }
   ]
 }

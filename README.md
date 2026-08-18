@@ -8,7 +8,7 @@ A collection of [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harne
 
 ```
 packages/
-  agent/                 agent strategy and preset plugins
+  agent/                 agent strategy, tool, and preset plugins
   feature/               feature plugins: model adapters, Web GUI settings sections, composer and UI features
   <group>/dsh-<name>/    one plugin per directory, named dsh-<scope>-<name> (e.g. dsh-chat-filemention; scope: agent | chat | config | web, hyphen-free name), published as @neplich/dsh-<name>
     package.json         npm manifest + dsh.bundle declaration
@@ -28,6 +28,8 @@ A package becomes an installable **bundle** by declaring `"dsh": { "bundle": { "
 | Package | Description | README |
 |---|---|---|
 | `@neplich/dsh-agent-presetdev` | Agent preset installer: installs the Development Mode (dev) preset — standard coding agent with Code Mode presentation plus the cordis toolset — into the user preset root; carries a "validate dynamically first, then land" development strategy (validate quickly with dynamic Cordis plugins by default, sink into a plugin repository once confirmed) | [README](packages/agent/dsh-agent-presetdev/README.md) |
+| `@neplich/dsh-agent-webuse` | Agent tool plugin: browser-use (computer-use style) tools — a Playwright-driven automation Chrome with navigate/snapshot/click/fill/tabs/eval/screenshot, headed by default, with graceful no-image screenshot degradation | [README](packages/agent/dsh-agent-webuse/README.md) |
+| `@neplich/dsh-agent-imagevault` | Agent tool plugin: archives every tool-result image to plain files and serves session images over a stable loopback HTTP URL (straight from the attachment store) for chat-stream display | [README](packages/agent/dsh-agent-imagevault/README.md) |
 
 ### Feature plugins
 
@@ -43,8 +45,6 @@ A package becomes an installable **bundle** by declaring `"dsh": { "bundle": { "
 | `@neplich/dsh-chat-annotations` | Web GUI plugin: select text in a historical assistant reply and attach it to the composer as pending annotations that ride along with your next message (persistent message highlight, count pill, detail popover; bilingual zh/en UI following dsh's language) | [README](packages/feature/dsh-chat-annotations/README.md) |
 | `@neplich/dsh-chat-autoload` | Web GUI plugin: automatically pages the current session's full history into the client and provides the `chatAutoload` service other plugins (e.g. dsh-chat-navigator) can depend on | [README](packages/feature/dsh-chat-autoload/README.md) |
 | `@neplich/dsh-chat-navigator` | Web GUI plugin: a slim conversation rail at the left edge of the chat area — one marker per user round, hover preview cards, click-to-jump, scroll-synced highlight (requires dsh-chat-autoload) | [README](packages/feature/dsh-chat-navigator/README.md) |
-| `@neplich/dsh-agent-webuse` | Agent plugin: browser-use (computer-use style) tools — a Playwright-driven automation Chrome with navigate/snapshot/click/fill/tabs/eval/screenshot, headed by default, with graceful no-image screenshot degradation | [README](packages/feature/dsh-agent-webuse/README.md) |
-| `@neplich/dsh-agent-imagevault` | Agent plugin: archives every tool-result image to plain files and serves session images over a stable loopback HTTP URL (straight from the attachment store) for chat-stream display | [README](packages/feature/dsh-agent-imagevault/README.md) |
 
 The three config plugins share code through `packages/feature/dsh-config-shared` (`@neplich/dsh-config-shared`), an internal library inlined at build time — not itself a plugin. Its shared scope-widget copy ships as dictionaries (`sharedScopeZh`/`sharedScopeEn`) that each consumer spreads into its own locale namespace.
 
@@ -61,7 +61,7 @@ pnpm run clean   # remove build outputs
 
 ## Add a plugin
 
-1. Create `packages/<group>/dsh-<name>/` (name every plugin `dsh-<scope>-<name>` — scope from `agent`/`chat`/`config`/`web`, hyphen-free name, e.g. `dsh-chat-filemention`; the directory name must match the package suffix; choose `agent/` for agent strategy and preset plugins, `feature/` for LLM adapters, Web GUI, and other feature plugins) with `package.json` (`name: @neplich/dsh-<name>` plus the `dsh.bundle` declaration), `src/index.ts`, `tsconfig.json`, `tests/`, `README.md` and `README.zh-CN.md`.
+1. Create `packages/<group>/dsh-<name>/` (name every plugin `dsh-<scope>-<name>` — scope from `agent`/`chat`/`config`/`web`, hyphen-free name, e.g. `dsh-chat-filemention`; the directory name must match the package suffix; choose `agent/` for agent strategy, tool, and preset plugins, `feature/` for LLM adapters, Web GUI, and other feature plugins) with `package.json` (`name: @neplich/dsh-<name>` plus the `dsh.bundle` declaration), `src/index.ts`, `tsconfig.json`, `tests/`, `README.md` and `README.zh-CN.md`.
 2. Update the plugin row in `cordis.patch.yml` (both `id` and `name`) and `name` in `src/index.ts`.
 3. Add `{ "path": "packages/<group>/dsh-<name>" }` to the root `tsconfig.json` references.
 4. Write `packages/<group>/dsh-<name>/README.md` (English) and its Chinese counterpart `README.zh-CN.md` (mutually linked at the top) describing the plugin's function, config, and install, and link the English one from the [Plugins](#plugins) table above.
