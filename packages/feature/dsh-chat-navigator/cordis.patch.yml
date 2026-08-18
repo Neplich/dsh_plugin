@@ -1,0 +1,4 @@
+# The dsh-chat-navigator bundle patch: one row inserted into the profile.
+- insert:
+    - id: chat-navigator
+      name: '@neplich/dsh-chat-navigator'
