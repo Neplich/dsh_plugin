@@ -41,6 +41,10 @@ packages/
 | `@neplich/dsh-config-instructions` | Web GUI 插件：「指令文档」设置分区——查看与编辑个人及项目根的 AGENTS.md / AGENTS.local.md（原子写、即时生效；界面随 dsh 语言中英双语） | [README](packages/feature/dsh-config-instructions/README.md) |
 | `@neplich/dsh-config-mcp` | Web GUI 插件：「MCP 服务」设置分区——实时服务器状态、增删改查写入用户级 cordis.patch.yml 并自动 HMR 热重载（界面随 dsh 语言中英双语） | [README](packages/feature/dsh-config-mcp/README.md) |
 | `@neplich/dsh-chat-annotations` | Web GUI 插件：在历史助手回复中框选文字并作为待发送注释附加到输入框，随下一条消息一起发送（消息持续高亮、计数胶囊、详情浮层；界面随 dsh 语言中英双语） | [README](packages/feature/dsh-chat-annotations/README.md) |
+| `@neplich/dsh-chat-autoload` | Web GUI 插件：自动把当前会话的完整历史分页拉取到客户端，并提供 `chatAutoload` 服务供其他插件（如 dsh-chat-navigator）依赖 | [README](packages/feature/dsh-chat-autoload/README.md) |
+| `@neplich/dsh-chat-navigator` | Web GUI 插件：聊天区左边缘的窄型对话轨道——每轮用户请求一条标记，悬停预览卡、点击跳转、滚动联动高亮（依赖 dsh-chat-autoload） | [README](packages/feature/dsh-chat-navigator/README.md) |
+| `@neplich/dsh-agent-webuse` | Agent 插件：浏览器操作（computer-use 风格）工具——Playwright 驱动的自动化 Chrome，支持导航/快照/点击/输入/标签页/脚本/截图，默认有头可观看，截图在无图片能力部署上优雅降级 | [README](packages/feature/dsh-agent-webuse/README.md) |
+| `@neplich/dsh-agent-imagevault` | Agent 插件：把工具结果里的所有图片归档为普通文件，并经回环 HTTP 直读附件库提供稳定图片 URL，用于聊天流展示 | [README](packages/feature/dsh-agent-imagevault/README.md) |
 
 三个 config 插件通过 `packages/feature/dsh-config-shared`（`@neplich/dsh-config-shared`）共享代码，这是一个构建时内联的内部库——本身不是插件。其共享的 scope 组件文案以字典形式发布（`sharedScopeZh`/`sharedScopeEn`），各消费插件 spread 进自己的 locale namespace。
 

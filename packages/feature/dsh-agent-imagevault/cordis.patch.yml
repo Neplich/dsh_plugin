@@ -1,0 +1,3 @@
+- insert:
+    - id: agent-imagevault
+      name: '@neplich/dsh-agent-imagevault'

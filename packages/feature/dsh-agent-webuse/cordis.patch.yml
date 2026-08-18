@@ -1,0 +1,3 @@
+- insert:
+    - id: agent-webuse
+      name: '@neplich/dsh-agent-webuse'

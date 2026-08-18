@@ -29,7 +29,19 @@
       "path": "packages/feature/dsh-chat-annotations"
     },
     {
+      "path": "packages/feature/dsh-chat-autoload"
+    },
+    {
+      "path": "packages/feature/dsh-chat-navigator"
+    },
+    {
       "path": "packages/agent/dsh-agent-presetdev"
+    },
+    {
+      "path": "packages/feature/dsh-agent-webuse"
+    },
+    {
+      "path": "packages/feature/dsh-agent-imagevault"
     }
   ]
 }
