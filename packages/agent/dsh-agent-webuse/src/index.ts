@@ -13,6 +13,7 @@
  */
 import { spawn } from 'node:child_process'
 import type { ChildProcess } from 'node:child_process'
+import { openSync } from 'node:fs'
 import { join } from 'node:path'
 import { homedir, tmpdir } from 'node:os'
 import { fileURLToPath } from 'node:url'
@@ -151,7 +152,9 @@ export function apply(ctx: Context, config: Config): void {
   const ensureServer = async (exec?: ToolRunContext): Promise<void> => {
     if (await healthy(exec)) return
     if (driver === undefined) {
-      driver = spawn(process.execPath, [DRIVER], {
+      const logPath = join(tmpdir(), 'dsh-webuse-driver.log')
+      const logFd = openSync(logPath, 'a')
+      const child = spawn(process.execPath, [DRIVER], {
         env: {
           ...process.env,
           WEBUSE_PORT: String(port),
@@ -161,9 +164,17 @@ export function apply(ctx: Context, config: Config): void {
           WEBUSE_WIDTH: String(config.viewportWidth),
           WEBUSE_HEIGHT: String(config.viewportHeight),
         },
-        stdio: 'ignore',
+        stdio: ['ignore', logFd, logFd],
       })
-      driver.on('exit', () => { driver = undefined })
+      driver = child
+      child.on('error', (error) => {
+        console.error(`[agent-webuse] driver spawn failed (script=${DRIVER}): ${error.message}`)
+        if (driver === child) driver = undefined
+      })
+      child.on('exit', (code, signal) => {
+        if (code !== 0 && code !== null) console.error(`[agent-webuse] driver exited code=${code} signal=${signal}; see ${logPath}`)
+        if (driver === child) driver = undefined
+      })
     }
     // Cold start includes browser launch; poll until the driver answers.
     const deadline = Date.now() + 30000
