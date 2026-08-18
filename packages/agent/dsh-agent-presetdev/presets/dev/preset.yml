@@ -1,3 +1,3 @@
 name: 开发模式
-description: 标准模式全部能力 + cordis 工具集；开发策略：先用动态 Cordis 插件快速验证，功能确认后再沉淀到 dsh 插件仓库
+description: 标准模式全部能力 + Code Mode（工具经 SDK 呈现，模型用一个 TypeScript 程序组合多步操作）+ cordis 工具集；开发策略：先用动态 Cordis 插件快速验证，功能确认后再沉淀到 dsh 插件仓库
 order: 5

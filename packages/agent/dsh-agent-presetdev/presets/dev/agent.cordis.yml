@@ -265,3 +265,18 @@
     searchTimeoutMs: 60000
 - id: tool-cordis
   name: '@deepseek-ai/dsh-tool-cordis'
+
+# ── presentation ────────────────────────────────────────────────────────────
+
+# Code Mode for this agent alone, integrated from the shipped `code` (PTC)
+# preset: instead of one tool call per action, the model writes a TypeScript
+# program against a generated SDK and `run_code` executes it, so a sequence
+# that would be five round trips becomes one. The registry itself stays on the
+# host plane — what this preset owns is the PRESENTATION of that registry for
+# this agent alone. The row waits for the host's `codeRuntime` rather than
+# assuming it: a deployment that composes no TypeScript runtime fails this
+# preset at mount, naming this id, instead of at the first request.
+- id: tool-presentation
+  name: '@deepseek-ai/dsh-agent-tool-presentation'
+  config:
+    mode: code

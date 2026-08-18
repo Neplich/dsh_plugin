@@ -1,7 +1,7 @@
 /**
  * dsh agent-preset installer bundle: installs the 开发模式 (dev) agent preset —
- * the standard coding agent plus the cordis runtime-inspection toolset — into
- * the user preset root.
+ * the standard coding agent with Code Mode presentation plus the cordis
+ * runtime-inspection toolset — into the user preset root.
  *
  * An agent preset is files, not a cordis row: the roster discovers presets
  * from its roots on every read, and the user root is `$DSH_HOME/.agent-presets`.

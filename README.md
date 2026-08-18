@@ -27,7 +27,7 @@ A package becomes an installable **bundle** by declaring `"dsh": { "bundle": { "
 
 | Package | Description | README |
 |---|---|---|
-| `@neplich/dsh-agent-presetdev` | Agent preset installer: installs the Development Mode (dev) preset — standard coding agent plus the cordis toolset — into the user preset root; carries a "validate dynamically first, then land" development strategy (validate quickly with dynamic Cordis plugins by default, sink into a plugin repository once confirmed) | [README](packages/agent/dsh-agent-presetdev/README.md) |
+| `@neplich/dsh-agent-presetdev` | Agent preset installer: installs the Development Mode (dev) preset — standard coding agent with Code Mode presentation plus the cordis toolset — into the user preset root; carries a "validate dynamically first, then land" development strategy (validate quickly with dynamic Cordis plugins by default, sink into a plugin repository once confirmed) | [README](packages/agent/dsh-agent-presetdev/README.md) |
 
 ### Feature plugins
 

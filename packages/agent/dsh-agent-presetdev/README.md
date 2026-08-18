@@ -2,11 +2,12 @@
 
 [中文版](README.zh-CN.md) · English
 
-dsh agent-preset installer plugin: installs the "Development Mode" (dev) agent preset — the full standard coding agent plus the cordis toolset (fast dynamic-plugin validation) — into the user preset root. The preset carries a built-in development strategy of "validate dynamically first, then land": by default, features are validated quickly with dynamic Cordis plugins in the running process, and only after the feature is revised and confirmed do they get sunk into a proper package in a dsh plugin repository.
+dsh agent-preset installer plugin: installs the "Development Mode" (dev) agent preset — the full standard coding agent with Code Mode presentation (tools exposed through the Code Mode SDK, so the model combines multi-step operations in one TypeScript program) plus the cordis toolset (fast dynamic-plugin validation) — into the user preset root. The preset carries a built-in development strategy of "validate dynamically first, then land": by default, features are validated quickly with dynamic Cordis plugins in the running process, and only after the feature is revised and confirmed do they get sunk into a proper package in a dsh plugin repository.
 
 ## Features
 
-- Installs the `dev` (Development Mode) agent preset: `agent.cordis.yml` (full standard + trailing `tool-cordis` rows), `preset.yml` (name: Development Mode, order: 5)
+- Installs the `dev` (Development Mode) agent preset: `agent.cordis.yml` (full standard + trailing `tool-cordis` + Code Mode `tool-presentation` rows), `preset.yml` (name: Development Mode, order: 5)
+- **Code Mode presentation** (integrated from the shipped `code`/PTC preset): the trailing `tool-presentation` row (`mode: code`) presents this agent's tools through the Code Mode SDK — instead of one tool call per action, the model writes a TypeScript program and `run_code` executes it, so a sequence that would be five round trips becomes one
 - Ships the `editing-cordis-compositions` skill with the package (the preset's `customSkillDirs` points to a copy of the in-package skills directory; `baseUrl` resolves relative to the preset's directory)
 - **Built-in development strategy** (persona prompt): by default, validate quickly with dynamic Cordis plugins (`cordis_define` / `cordis_run` / `cordis_inspect_*`), then sink the confirmed feature into a proper package in the target plugin repository (target and placement per that repository's maintenance docs); remove dynamic plugins when done (`cordis_stop` / `cordis_undefine`)
 - **Idempotent install**: existing targets are not overwritten (local edits preserved); `DSH_PRESET_DEV_FORCE=1` forces a refresh to the in-package version
@@ -58,4 +59,4 @@ DSH_PRESET_DEV_FORCE=1 dsh --profile <name>   # force-overwrite with the in-pack
 
 ## Model Experience
 
-This plugin registers no model tools, prompt segments, or events. After installation, dev sessions gain `cordis_inspect_list` / `cordis_inspect_query` / `cordis_inspect_self` / `cordis_define` / `cordis_run` / `cordis_stop` / `cordis_undefine` in the tool list and `editing-cordis-compositions` in the skill directory; the persona carries the "validate dynamically first, then land" strategy: by default, validate features quickly with dynamic Cordis plugins, and only after the feature is revised and confirmed sink it into a proper package in a dsh plugin repository.
+This plugin registers no model tools, prompt segments, or events. After installation, dev sessions present their tools through the Code Mode SDK (`run_code`), and the catalog gains `cordis_inspect_list` / `cordis_inspect_query` / `cordis_inspect_self` / `cordis_define` / `cordis_run` / `cordis_stop` / `cordis_undefine` plus `editing-cordis-compositions` in the skill directory; the persona carries the "validate dynamically first, then land" strategy: by default, validate features quickly with dynamic Cordis plugins, and only after the feature is revised and confirmed sink it into a proper package in a dsh plugin repository.
