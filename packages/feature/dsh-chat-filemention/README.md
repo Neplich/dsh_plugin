@@ -2,6 +2,8 @@
 
 [中文版](README.zh-CN.md) · English
 
+> **Status: achieved by dsh v0.1.0-rc.8.** The stock Web client now provides native `@` file and session references. This plugin is disabled in the local `web` profile while the native experience is evaluated. Its source remains available so send-time full-content inlining can later be reconsidered as an optional complement to native `@`.
+
 Web GUI plugin: typing `@` in the dsh composer opens the input-trigger menu with a **file** group listing the session workspace's files; picking one inserts a chip-style reference into the draft. A single prompt can mention several files. On send, each mention is serialized host-side: the file's text content is inlined into the prompt as `<file path="...">...</file>`, so the model receives the actual content, not just a path.
 
 Interaction details: the query filters by plain case-insensitive substring (basename prefix → basename containment → path containment, no fuzzy tier). Each menu row carries a `📄` icon, the file **basename** (with a ` (dir)` suffix when the page collides), and its directory in the description column. The composer's reference chip shows `📄 ` plus the basename, tail-elided against a canvas-measured width so the marker and the name's leading characters always survive the chip's fixed-width cell (its CSS would otherwise cut a random middle slice). After one per-session listing fetch, every keystroke filters the settled snapshot locally (the ui-skill cache pattern), so refinement never waits on the network; trees bigger than `maxListed` fall back to per-keystroke server-side ranking.
@@ -29,7 +31,9 @@ Requires a `dsh web` profile: the plugin declares `inject: ['agents', 'webServer
 | `cacheTtlMs` | `number` | `3000` | Per-cwd walk cache lifetime in milliseconds. |
 | `ignoreDirs` | `string[]` | `node_modules`, `.git`, … | Directory basenames the walk skips entirely. |
 
-## Install
+## Re-enable for comparison
+
+Evaluate dsh's native `@` first. Re-enable this plugin only when comparing or testing its send-time full-content inlining:
 
 ```sh
 dsh plugin --profile <name> add @neplich/dsh-chat-filemention   # or a local path: ./packages/feature/dsh-chat-filemention
@@ -37,6 +41,12 @@ dsh web --profile <name>
 ```
 
 Then type `@` in the composer and pick files from the **file** group.
+
+Disable it again with:
+
+```sh
+dsh plugin --profile <name> remove @neplich/dsh-chat-filemention
+```
 
 ## Develop
 

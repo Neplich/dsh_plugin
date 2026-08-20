@@ -2,6 +2,8 @@
 
 [English](README.md) · 中文版
 
+> **状态：已由 dsh v0.1.0-rc.8 原生实现（Achieved）。** 原生 Web 界面现已支持 `@` 文件与会话引用。本地 `web` Profile 已停用本插件，先观察原生 `@` 的实际使用效果。插件源码继续保留；只有确认仍需要“发送时内联文件全文”后，才考虑把它作为原生 `@` 的可选补充。
+
 Web GUI 插件：在 dsh 输入框中输入 `@` 会打开 input-trigger 菜单，其中包含一个**文件**分组，列出会话工作区的文件；选中一个文件会在草稿中插入 chip 样式引用。一条提示中可以引用多个文件。发送时，每个引用在 host 侧序列化：文件文本内容被内联进提示词，形如 `<file path="...">...</file>`，因此模型收到的是实际内容，而不仅仅是路径。
 
 交互细节：查询按不区分大小写的纯子串过滤（basename 前缀 → basename 包含 → 路径包含，无模糊层级）。每个菜单行带 `📄` 图标、文件 **basename**（页面冲突时带 ` (dir)` 后缀），目录显示在描述列。输入框的引用 chip 显示 `📄 ` 加 basename，按 canvas 实测宽度尾部省略，确保标记与名称前部字符在 chip 的固定宽度单元格内始终可见（否则 CSS 会切掉中间随机一段）。每个会话首次拉取列表后，后续每次按键都在本地过滤已定稿的快照（ui-skill 缓存模式），细化搜索无需等待网络；超过 `maxListed` 的大目录树回退为每次按键的服务端排序。
@@ -29,7 +31,9 @@ Web GUI 插件：在 dsh 输入框中输入 `@` 会打开 input-trigger 菜单�
 | `cacheTtlMs` | `number` | `3000` | 每个 cwd 遍历缓存的存活毫秒数。 |
 | `ignoreDirs` | `string[]` | `node_modules`, `.git`, … | 遍历完全跳过的目录 basename。 |
 
-## 安装
+## 重新启用以比较
+
+请先实际使用 dsh 原生 `@`。仅在需要比较或验证“发送时内联文件全文”时重新启用本插件：
 
 ```sh
 dsh plugin --profile <name> add @neplich/dsh-chat-filemention   # 或本地路径：./packages/feature/dsh-chat-filemention
@@ -37,6 +41,12 @@ dsh web --profile <name>
 ```
 
 然后在输入框中输入 `@`，从 **文件** 分组中选择文件。
+
+再次停用：
+
+```sh
+dsh plugin --profile <name> remove @neplich/dsh-chat-filemention
+```
 
 ## 开发
 

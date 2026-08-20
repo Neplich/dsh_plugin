@@ -36,7 +36,7 @@ packages/
 | 包 | 描述 | README |
 |---|---|---|
 | `@neplich/dsh-chat-autofold` | Web GUI 插件：assistant 开始输出正文时，自动把正文之前的思考与工具调用记录折叠到一条常驻展开/收起条之后（条文案随 dsh 界面语言中英双语） | [README](packages/feature/dsh-chat-autofold/README.md) |
-| `@neplich/dsh-chat-filemention` | Web GUI 插件：输入框中的 `@` 文件引用（本地缓存子串过滤、图标标记 chip、多文件引用）；被引用文件以内联 `<file path="...">...</file>` 形式进入提示词 | [README](packages/feature/dsh-chat-filemention/README.md) |
+| `@neplich/dsh-chat-filemention` | 已由 dsh v0.1.0-rc.8 原生实现，当前停用并观察原生 `@` 的实际效果；仅保留为“发送时内联文件全文”的潜在补充 | [README](packages/feature/dsh-chat-filemention/README.md) |
 | `@neplich/dsh-web-workpanel` | Web GUI 插件：右侧工作面板（Option/Alt+J），支持文件/终端混合标签、保留状态的文件浏览、交互式 PTY，以及按需加载的 PDF.js 与 OOXML Office 预览；界面随 dsh 语言中英双语 | [README](packages/feature/dsh-web-workpanel/README.md) |
 | `@neplich/dsh-chat-mermaid` | Web GUI 插件：把 mermaid 代码块渲染为 SVG 图表卡片（可切换源码），并提供全屏缩放查看器（滚轮缩放/拖拽平移）；图表跟随明暗主题，界面随 dsh 语言中英双语，引擎经回环路由提供、不依赖 CDN | [README](packages/feature/dsh-chat-mermaid/README.md) |
 | `@neplich/dsh-config-skills` | Web GUI 插件：「技能」设置分区——个人（`~/.dsh`/`~/.agents`）与项目（`<root>/.dsh`/`<root>/.agents`）技能的只读浏览器，带来源徽章与同名覆盖关系（界面随 dsh 语言中英双语） | [README](packages/feature/dsh-config-skills/README.md) |
