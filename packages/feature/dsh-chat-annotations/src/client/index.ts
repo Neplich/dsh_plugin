@@ -27,8 +27,6 @@ import type {
 import type {} from '@deepseek-ai/dsh-client-locale/client'
 // Type-only: the ctx.timer service declaration.
 import type {} from '@deepseek-ai/dsh-cordis-client-runner/client'
-// Type-only: the 'shell.overlay' SlotMap entry.
-import type {} from '@deepseek-ai/dsh-client-ui-layout/client'
 // Type-only: the 'conversation.input.left' SlotMap entry.
 import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
 import { ChipView, OverlayView, type EngineFace } from './components.tsx'
@@ -446,8 +444,8 @@ export function apply(ctx: ClientContext): void {
 
   ctx.effect(() => {
     const disposers = [
-      ctx.slots.inject('shell.overlay', () => ctx.slots.register(
-        { name: 'shell.overlay', id: 'dsh-chat-annotations', order: 300, locale: NS, inject: () => face() },
+      ctx.slots.inject('conversation.input.dock', () => ctx.slots.register(
+        { name: 'conversation.input.dock', id: 'dsh-chat-annotations', order: 100, locale: NS, inject: () => face() },
         OverlayView,
       )),
       ctx.slots.inject('conversation.input.left', () => ctx.slots.register(
