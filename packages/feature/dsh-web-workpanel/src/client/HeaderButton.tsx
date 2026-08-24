@@ -5,8 +5,7 @@
  */
 import type { ReactElement } from 'react'
 import type { PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
-import { Tooltip } from '@deepseek-ai/dsh-client-ui-primitives'
-import { IconPanelRight } from './icons.tsx'
+import { IconPanelLeftOutline16, Tooltip } from '@deepseek-ai/dsh-client-ui-primitives'
 
 /** Verbs the registration's inject face hands the button. */
 export interface HeaderButtonInjected {
@@ -27,7 +26,7 @@ export function WorkPanelButton({ togglePanel, shortcut, t }: HeaderButtonProps)
   return (
     <Tooltip label={label} side="bottom">
       <button type="button" className="dshwp-iconbtn" aria-label={label} onClick={togglePanel}>
-        <IconPanelRight size={14} />
+        <IconPanelLeftOutline16 className="dshwp-panelRightIcon" size={14} />
       </button>
     </Tooltip>
   )

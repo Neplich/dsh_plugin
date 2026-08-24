@@ -174,16 +174,6 @@ export function IconRestore({ size = 16 }: IconProps): ReactElement {
   )
 }
 
-/** Right-docked panel (the header toggle). */
-export function IconPanelRight({ size = 16 }: IconProps): ReactElement {
-  return (
-    <svg {...base(size)}>
-      <rect x="2" y="3" width="12" height="10" rx="1.5" />
-      <path d="M10 3v10" />
-    </svg>
-  )
-}
-
 /** Circular arrow (refresh / restart). */
 export function IconRefresh({ size = 16 }: IconProps): ReactElement {
   return (

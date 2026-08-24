@@ -99,6 +99,9 @@ export const WORK_PANEL_CSS = `
   outline: 2px solid var(--dsw-alias-brand-primary);
   outline-offset: -2px;
 }
+.dshwp-panelRightIcon {
+  transform: scaleX(-1);
+}
 
 .dshwp-body {
   flex: 1;
