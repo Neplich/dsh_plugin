@@ -20,15 +20,19 @@
  *
  * @module @neplich/dsh-chat-annotations/client
  */
-import type {
-  ClientContext, SessionFace, SessionId,
-} from '@deepseek-ai/dsh-client-runtime/client'
+import type { Context as ClientContext } from '@deepseek-ai/cordis'
+import type { SessionFace } from '@deepseek-ai/dsh-api-session-controller/client'
+import type { SessionId } from '@deepseek-ai/dsh-session/types'
 // Type-only: ctx.locale service declaration.
 import type {} from '@deepseek-ai/dsh-client-locale/client'
 // Type-only: the ctx.timer service declaration.
 import type {} from '@deepseek-ai/dsh-cordis-client-runner/client'
 // Type-only: the 'conversation.input.left' SlotMap entry.
 import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
+// Type-only: ctx.slots merge.
+import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
+// Type-only: session-scoped standard slot props.
+import type {} from '@deepseek-ai/dsh-client-ui-session/client'
 import { ChipView, OverlayView, type EngineFace } from './components.tsx'
 import {
   FLOW_SEL, MARK_ATTR, findItem, nodeAtPath, pathTo, rectOf, textNodesInRange, wrapRange,

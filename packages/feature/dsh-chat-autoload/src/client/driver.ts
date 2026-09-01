@@ -17,6 +17,7 @@ export interface AutoloadSession {
   getSnapshot(): AutoloadSnapshot
   subscribe(fn: () => void): () => void
   loadOlder(): Promise<void>
+  historyHead(): unknown
 }
 
 /** Structural subset of the conversation snapshot the driver reads. */
@@ -24,7 +25,6 @@ export interface AutoloadSnapshot {
   readonly openState: string
   readonly hasMore: boolean
   readonly loadingOlder: boolean
-  readonly chat: { readonly order: readonly string[] }
 }
 
 /** Default backoff while another page request is in flight. */
@@ -91,10 +91,10 @@ export class SessionAutoload {
         await this.sleep(200)
         continue
       }
-      const head = current.chat.order[0]
+      const head = this.session.historyHead()
       await this.session.loadOlder()
       const next = this.session.getSnapshot()
-      if (next.hasMore && next.chat.order[0] === head) {
+      if (next.hasMore && this.session.historyHead() === head) {
         stalled += 1
         if (stalled >= this.maxStalled) break
       } else {

@@ -6,7 +6,7 @@
  *
  * @module @neplich/dsh-web-workpanel/client/store
  */
-import { defineStore } from '@deepseek-ai/dsh-client-runtime/client'
+import { defineStore } from '@deepseek-ai/dsh-client-store'
 
 /** Work-tab kinds. */
 export type PanelTool = 'files' | 'terminal'

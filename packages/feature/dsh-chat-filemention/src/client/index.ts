@@ -21,7 +21,8 @@
  *
  * @module @neplich/dsh-chat-filemention/client
  */
-import type { ClientContext } from '@deepseek-ai/dsh-client-runtime/client'
+import type { Context as ClientContext } from '@deepseek-ai/cordis'
+import type {} from '@deepseek-ai/dsh-client-connection/client'
 import type {
   ClientSessionContext, InputTriggerCandidate, InputTriggerServiceContract, InputTriggerSource,
 } from '@deepseek-ai/dsh-client-ui-input-trigger/client'
@@ -151,8 +152,8 @@ export function createFileSource(): { source: InputTriggerSource, reset: () => v
   const toCandidates = (files: readonly FileEntry[]): InputTriggerCandidate[] =>
     toDisplayRows(files).map((row) => {
       const candidate: InputTriggerCandidate = row.dir === ''
-        ? { name: row.name, icon: FILE_MARKER }
-        : { name: row.name, description: row.dir, icon: FILE_MARKER }
+        ? { name: row.name, icon: 'file' }
+        : { name: row.name, description: row.dir, icon: 'file' }
       paths.set(candidate, row.path)
       return candidate
     })

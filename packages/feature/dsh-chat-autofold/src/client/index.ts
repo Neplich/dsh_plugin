@@ -14,7 +14,7 @@
  *
  * @module @neplich/dsh-chat-autofold/client
  */
-import type { ClientContext } from '@deepseek-ai/dsh-client-runtime/client'
+import type { Context as ClientContext } from '@deepseek-ai/cordis'
 // Type-only: the ctx.locale service declaration.
 import type {} from '@deepseek-ai/dsh-client-locale/client'
 import { en, NS, zh } from './locales.ts'
