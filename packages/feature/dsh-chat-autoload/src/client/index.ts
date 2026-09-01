@@ -8,9 +8,15 @@
  *
  * @module @neplich/dsh-chat-autoload/client
  */
-import type { ClientContext, SessionId } from '@deepseek-ai/dsh-client-runtime/client'
+import type { Context as ClientContext } from '@deepseek-ai/cordis'
+import type {} from '@deepseek-ai/dsh-api-session-controller/client'
+import type { SessionId } from '@deepseek-ai/dsh-session/types'
 // Type-only: the 'shell.overlay' SlotMap entry.
 import type {} from '@deepseek-ai/dsh-client-ui-layout/client'
+// Type-only: ctx.slots merge.
+import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
+// Type-only: global session selector slot props.
+import type {} from '@deepseek-ai/dsh-client-ui-session/client'
 import { SessionAutoload } from './driver.ts'
 import { AutoloadWatcher } from './Watcher.tsx'
 
@@ -62,7 +68,12 @@ class AutoloadService implements ChatAutoload {
     }
     const binding = this.ctx.sessions.binding(id)
     if (binding === undefined) return
-    this.controllers.set(key, new SessionAutoload(binding.session))
+    this.controllers.set(key, new SessionAutoload({
+      getSnapshot: () => binding.session.getSnapshot(),
+      subscribe: listener => binding.session.subscribe(listener),
+      loadOlder: () => binding.session.loadOlder(),
+      historyHead: () => binding.eventSource.getSnapshot().entries[0],
+    }))
   }
 
   isComplete(id: SessionId): boolean {

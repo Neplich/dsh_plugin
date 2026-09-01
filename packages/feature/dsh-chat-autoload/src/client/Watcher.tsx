@@ -6,7 +6,7 @@
  */
 import { useEffect } from 'react'
 import type { PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
-import type { SessionId } from '@deepseek-ai/dsh-client-runtime/client'
+import type { SessionId } from '@deepseek-ai/dsh-session/types'
 
 /** Verbs the registration's inject face hands the watcher. */
 export interface AutoloadWatcherInjected {

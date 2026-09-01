@@ -8,11 +8,17 @@
  *
  * @module @neplich/dsh-chat-navigator/client
  */
-import type { ClientContext, SessionId } from '@deepseek-ai/dsh-client-runtime/client'
+import type { Context as ClientContext } from '@deepseek-ai/cordis'
+import type { SessionId } from '@deepseek-ai/dsh-session/types'
 // Type-only: the ctx.locale service declaration.
 import type {} from '@deepseek-ai/dsh-client-locale/client'
 // Type-only: the 'shell.overlay' SlotMap entry.
 import type {} from '@deepseek-ai/dsh-client-ui-layout/client'
+// Type-only: ctx.slots and ctx.uiConversation service declarations.
+import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
+import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
+import type {} from '@deepseek-ai/dsh-client-ui-chat/client'
+import type {} from '@deepseek-ai/dsh-client-ui-session/client'
 // Type-only: the chatAutoload service face (optional dependency edge).
 import type { ChatAutoload } from '@neplich/dsh-chat-autoload/client'
 import { en, NS, zh } from './locales.ts'
@@ -48,6 +54,10 @@ export function apply(ctx: ClientContext): void {
     locale: NS,
     inject: () => ({
       getBinding: (id: SessionId) => ctx.sessions.binding(id),
+      getChat: (id: SessionId) => {
+        const binding = ctx.sessions.binding(id)
+        return binding === undefined ? undefined : ctx.uiConversation.binding(binding).target('chat')
+      },
       ensureLoaded: (id: SessionId) => { autoload?.ensureLoaded(id) },
     }),
   }, Navigator))

@@ -8,13 +8,17 @@
  *
  * @module @neplich/dsh-web-workpanel/client
  */
-import type { ClientContext } from '@deepseek-ai/dsh-client-runtime/client'
+import type { Context as ClientContext } from '@deepseek-ai/cordis'
 // Type-only: ctx.locale merge.
 import type {} from '@deepseek-ai/dsh-client-locale/client'
 // Type-only: ctx.layout merge plus the 'shell.overlay' SlotMap entry.
 import type {} from '@deepseek-ai/dsh-client-ui-layout/client'
 // Type-only: the 'conversation.session.header.utilities' SlotMap entry.
 import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
+// Type-only: ctx.slots merge.
+import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
+// Type-only: global session selector slot props.
+import type {} from '@deepseek-ai/dsh-client-ui-session/client'
 import xtermCss from '@xterm/xterm/css/xterm.css'
 import pdfViewerCss from 'pdfjs-dist/web/pdf_viewer.css'
 import { ROUTES } from '../shared/protocol.ts'

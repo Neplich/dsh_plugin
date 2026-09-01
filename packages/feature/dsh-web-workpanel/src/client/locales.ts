@@ -83,6 +83,7 @@ export const zh = {
   'terminal.tab': '终端 {index}',
   'copy': '复制',
   'copied': '已复制',
+  'footnotes': '脚注',
 } as const
 
 /** Dictionary key union. */
@@ -165,4 +166,5 @@ export const en: Record<WorkPanelKey, string> = {
   'terminal.tab': 'Terminal {index}',
   'copy': 'Copy',
   'copied': 'Copied',
+  'footnotes': 'Footnotes',
 }

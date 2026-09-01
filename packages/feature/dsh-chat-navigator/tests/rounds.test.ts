@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { ConversationSnapshot } from '@deepseek-ai/dsh-client-runtime/client'
+import type { ChatSnapshot } from '@deepseek-ai/dsh-client-ui-chat/client'
 import { buildRounds, clip, collapse } from '../src/client/rounds.ts'
 
 interface FakeNode {
@@ -9,14 +9,11 @@ interface FakeNode {
 }
 
 /** Minimal snapshot fixture: only the fields buildRounds reads. */
-function snap(nodes: FakeNode[], running = false): ConversationSnapshot {
+function snap(nodes: FakeNode[]): ChatSnapshot {
   return {
-    running,
-    chat: {
-      order: nodes.map(n => n.key),
-      nodes: new Map(nodes.map(n => [n.key, n])),
-    },
-  } as unknown as ConversationSnapshot
+    order: nodes.map(n => n.key),
+    nodes: new Map(nodes.map(n => [n.key, n])),
+  } as unknown as ChatSnapshot
 }
 
 const user = (key: string, text: string): FakeNode => ({
@@ -63,7 +60,7 @@ describe('buildRounds', () => {
   })
 
   it('marks the last round processing while the session streams', () => {
-    const rounds = buildRounds(snap([user('u1', 'q1'), user('u2', 'q2')], true))
+    const rounds = buildRounds(snap([user('u1', 'q1'), user('u2', 'q2')]), true)
     expect(rounds[0]!.status).toBe('done')
     expect(rounds[1]!.status).toBe('processing')
   })
@@ -90,7 +87,7 @@ describe('buildRounds', () => {
   it('rebuilding after a new message appends without duplicating markers', () => {
     const base = [user('u1', 'q1'), assistant('a1', 'a1'), user('u2', 'q2'), assistant('a2', 'a2')]
     const before = buildRounds(snap(base))
-    const after = buildRounds(snap([...base, user('u3', 'q3')], true))
+    const after = buildRounds(snap([...base, user('u3', 'q3')]), true)
     expect(after).toHaveLength(3)
     expect(after.slice(0, 2).map(r => r.anchorKey)).toEqual(before.map(r => r.anchorKey))
     expect(after[2]!.anchorKey).toBe('u3')

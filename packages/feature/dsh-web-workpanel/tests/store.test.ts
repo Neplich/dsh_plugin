@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest'
 // The published client-runtime `/client` artifact is the module-loader
 // closure factory (it evaluates against window.__ModuleLoader__), so unit
 // tests substitute a minimal JSON-draft defineStore with the same surface.
-vi.mock('@deepseek-ai/dsh-client-runtime/client', () => ({
+vi.mock('@deepseek-ai/dsh-client-store', () => ({
   defineStore: (decl: {
     init: () => unknown
     actions: Record<string, (draft: never, ...args: never[]) => void>

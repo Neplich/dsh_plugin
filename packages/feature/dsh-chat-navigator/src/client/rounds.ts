@@ -11,7 +11,7 @@
  *
  * @module @neplich/dsh-chat-navigator/client/rounds
  */
-import type { ConversationSnapshot } from '@deepseek-ai/dsh-client-runtime/client'
+import type { ChatSnapshot } from '@deepseek-ai/dsh-client-ui-chat/client'
 
 /** One conversation round as the rail presents it. */
 export interface Round {
@@ -81,7 +81,7 @@ function textOfAssistant(data: AssistantStepData | undefined): string {
  * @param snapshot - live conversation snapshot (loaded window).
  * @returns rounds in conversation order, statuses resolved.
  */
-export function buildRounds(snapshot: ConversationSnapshot): Round[] {
+export function buildRounds(snapshot: ChatSnapshot, running = false): Round[] {
   interface Draft {
     anchorKey: string
     title: string
@@ -91,8 +91,8 @@ export function buildRounds(snapshot: ConversationSnapshot): Round[] {
   }
   const drafts: Draft[] = []
   let current: Draft | null = null
-  for (const key of snapshot.chat.order) {
-    const node = snapshot.chat.nodes.get(key)
+  for (const key of snapshot.order) {
+    const node = snapshot.nodes.get(key)
     if (node === undefined) continue
     if (node.kind === 'user') {
       const text = textOfContent(node.data as UserNodeData)
@@ -121,6 +121,6 @@ export function buildRounds(snapshot: ConversationSnapshot): Round[] {
     title: draft.title,
     userSummary: draft.userSummary,
     assistantSummary: draft.assistantSummary,
-    status: draft.running || (draft === last && snapshot.running) ? 'processing' : 'done',
+    status: draft.running || (draft === last && running) ? 'processing' : 'done',
   }))
 }

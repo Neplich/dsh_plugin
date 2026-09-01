@@ -10,16 +10,19 @@
  */
 import { useEffect, useState, useSyncExternalStore } from 'react'
 import type { MouseEvent as ReactMouseEvent, FocusEvent as ReactFocusEvent, KeyboardEvent as ReactKeyboardEvent, ReactElement } from 'react'
+import type { SessionBinding, SessionSnapshot } from '@deepseek-ai/dsh-api-session-controller/client'
+import type { ObservableSnapshot } from '@deepseek-ai/dsh-client-store'
+import type { ChatSnapshot } from '@deepseek-ai/dsh-client-ui-chat/client'
 import type { PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
-import type {
-  ConversationSnapshot, SessionBinding, SessionId,
-} from '@deepseek-ai/dsh-client-runtime/client'
+import type { SessionId } from '@deepseek-ai/dsh-session/types'
 import { buildRounds, type Round } from './rounds.ts'
 
 /** Verbs the registration's inject face hands the rail. */
 export interface NavigatorInjected {
   /** Resolve one session's binding (object layer). */
   readonly getBinding: (id: SessionId) => SessionBinding | undefined
+  /** Resolve one session's Chat target snapshot. */
+  readonly getChat: (id: SessionId) => ObservableSnapshot<ChatSnapshot | undefined> | undefined
   /** Re-arm full-history paging for a session (chatAutoload service). */
   readonly ensureLoaded: (id: SessionId) => void
 }
@@ -66,7 +69,7 @@ function anchorRow(key: string): HTMLElement | null {
  * @param props - slot props.
  * @returns the rail overlay, or null.
  */
-export function Navigator({ useSessions, getBinding, ensureLoaded, t }: NavigatorProps): ReactElement | null {
+export function Navigator({ useSessions, getBinding, getChat, ensureLoaded, t }: NavigatorProps): ReactElement | null {
   const current = useSessions(s => s.current)
   const [geo, setGeo] = useState<RailGeo | null>(null)
   const [curKey, setCurKey] = useState<string | null>(null)
@@ -75,9 +78,14 @@ export function Navigator({ useSessions, getBinding, ensureLoaded, t }: Navigato
 
   const binding = current === undefined ? undefined : getBinding(current)
   const session = binding?.session
-  const snapshot = useSyncExternalStore(
+  const sessionSnapshot = useSyncExternalStore(
     session === undefined ? () => () => {} : (fn: () => void) => session.subscribe(fn),
-    (): ConversationSnapshot | null => session === undefined ? null : session.getSnapshot(),
+    (): SessionSnapshot | null => session === undefined ? null : session.getSnapshot(),
+  )
+  const chat = current === undefined ? undefined : getChat(current)
+  const chatSnapshot = useSyncExternalStore(
+    chat === undefined ? () => () => {} : (fn: () => void) => chat.subscribe(fn),
+    (): ChatSnapshot | null => chat?.getSnapshot() ?? null,
   )
 
   // Session switch: reset per-session viewing state and re-arm full-history
@@ -89,8 +97,10 @@ export function Navigator({ useSessions, getBinding, ensureLoaded, t }: Navigato
     if (current !== undefined) ensureLoaded(current)
   }, [current, ensureLoaded])
 
-  const rounds = snapshot === null ? [] : buildRounds(snapshot)
-  const hasMore = snapshot?.hasMore === true
+  const rounds = chatSnapshot === null
+    ? []
+    : buildRounds(chatSnapshot, sessionSnapshot?.running === true)
+  const hasMore = sessionSnapshot?.hasMore === true
 
   function measure(): void {
     const flow = findFlow()
@@ -151,7 +161,7 @@ export function Navigator({ useSessions, getBinding, ensureLoaded, t }: Navigato
       observer?.disconnect()
       if (raf !== 0) cancelAnimationFrame(raf)
     }
-  }, [current, snapshot?.chat.order.length])
+  }, [current, chatSnapshot?.order.length])
 
   if (current === undefined || rounds.length < 2 || geo === null) return null
 

@@ -101,7 +101,7 @@ describe('createFileSource', () => {
     stubFetch(LISTING)
     const { source } = createFileSource()
     const candidates = await source.candidates(session, req('client'))
-    expect(candidates[0]).toMatchObject({ icon: '📄', description: 'src/client' })
+    expect(candidates[0]).toMatchObject({ icon: 'file', description: 'src/client' })
     const outcome = source.onPick({
       candidate: candidates[0]!,
       session,

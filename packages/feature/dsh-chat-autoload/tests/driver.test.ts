@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { SessionAutoload, type AutoloadSession, type AutoloadSnapshot } from '../src/client/driver.ts'
 
 /** Fake session paging two-message pages from a fixed backlog. */
-function fakeSession(pages: string[][]): AutoloadSession & { notify(): void; state: AutoloadSnapshot } {
+function fakeSession(pages: string[][]): AutoloadSession & { notify(): void; state: AutoloadSnapshot; loaded: string[] } {
   const remaining = [...pages]
   const loaded: string[] = []
   const listeners = new Set<() => void>()
@@ -10,11 +10,12 @@ function fakeSession(pages: string[][]): AutoloadSession & { notify(): void; sta
     openState: 'open',
     hasMore: remaining.length > 0,
     loadingOlder: false,
-    chat: { order: loaded },
   }
   return {
     state,
+    loaded,
     getSnapshot: () => state,
+    historyHead: () => loaded[0],
     subscribe: fn => { listeners.add(fn); return () => { listeners.delete(fn) } },
     notify: () => { for (const fn of [...listeners]) fn() },
     loadOlder: () => {
@@ -33,7 +34,7 @@ describe('SessionAutoload', () => {
     const session = fakeSession([['a', 'b'], ['c'], ['d']])
     const driver = new SessionAutoload(session, noSleep)
     await driver.tick()
-    expect(session.state.chat.order).toEqual(['d', 'c', 'a', 'b'])
+    expect(session.loaded).toEqual(['d', 'c', 'a', 'b'])
     expect(driver.complete).toBe(true)
   })
 
@@ -61,13 +62,13 @@ describe('SessionAutoload', () => {
     // Resync: window resets to the tail; one older page reappears.
     session.state.hasMore = true
     session.loadOlder = () => {
-      session.state.chat.order.unshift('older')
+      session.loaded.unshift('older')
       session.state.hasMore = false
       return Promise.resolve()
     }
     session.notify()
     await driver.tick()
-    expect(session.state.chat.order[0]).toBe('older')
+    expect(session.loaded[0]).toBe('older')
     expect(driver.complete).toBe(true)
   })
 
@@ -77,7 +78,7 @@ describe('SessionAutoload', () => {
     const driver = new SessionAutoload(session, noSleep)
     await driver.tick()
     expect(driver.complete).toBe(false)
-    expect(session.state.chat.order).toEqual([])
+    expect(session.loaded).toEqual([])
   })
 
   it('dispose stops further driving', async () => {
@@ -87,7 +88,7 @@ describe('SessionAutoload', () => {
     // must prevent every later page.
     driver.dispose()
     await driver.tick()
-    expect(session.state.chat.order).toEqual(['a'])
+    expect(session.loaded).toEqual(['a'])
     expect(driver.complete).toBe(false)
   })
 })

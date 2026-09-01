@@ -346,7 +346,10 @@ function FilePreview({ sessionId, path, source, t }: {
                 ? (
                     <MarkdownText
                       text={state.content}
-                      codeLabels={{ copyLabel: t('copy'), copiedLabel: t('copied') }}
+                      labels={{
+                        code: { copyLabel: t('copy'), copiedLabel: t('copied') },
+                        footnotes: t('footnotes'),
+                      }}
                     />
                   )
                 : <pre className="dshwp-sourceText"><code>{state.content}</code></pre>}
